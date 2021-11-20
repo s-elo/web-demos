@@ -1,0 +1,70 @@
+{
+    /*
+    * config the ts
+    * enter tsc -w can watch the files changed
+    * the files are configed in include options
+    */
+    "include": [
+       "./demos/*/script/*" 
+, "demos/01-timer/script/g/test.ts"    ],
+
+    "exclude": [],
+
+    "compilerOptions": {
+        // which version
+        "target": "ES6",
+
+        // module methods
+        "module": "es2015",
+
+        // what libs used
+        "lib": ["ES6", "DOM"],
+
+        // output dir
+        "outDir": "./dist",
+
+        // compile the js files in the included dir or not
+        "allowJs": false,
+
+        // check the js syntax or not
+        "checkJs": false,
+
+        // remove the comments or not
+        "removeComments": true,
+
+        // generate the compiled ts files or not
+        // if you only want to use ts to check the syntax
+        // false means generating
+        "noEmit": false,
+
+        // not generate the files if there are errors
+        // true means follow the above rule 
+        "noEmitOnError": true,
+
+        // the overall switch
+        // when true all the below are true
+        "strict": true,
+
+        // use strict or not
+        // when we use modules, js will be auto set as use strict
+        "alwaysStrict": true,
+        
+        // not allow implicit any type when it true
+        "noImplicitAny": true,
+
+        // not allow implicit this type when it true
+        /*
+        function (this: window) {
+            console.log(this)
+        }
+        */
+        "noImplicitThis": true,
+
+        // check if the var is possible to be void
+        /*
+        const box1 = document.querySelector('box1');
+        // box1 might be null
+        */
+        "strictNullChecks": true
+    }   
+}

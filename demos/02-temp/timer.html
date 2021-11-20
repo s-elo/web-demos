@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <link rel="stylesheet/less" type="text/css" href="./css/index.less" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.11.1/less.min.js"></script>
+  </head>
+  <body>
+    <div class="welcome">
+        <h1>Welcome to this quick demo!</h1>
+    </div>
+    <script src="./dist/start.js"></script>
+    <script>
+      const domain = `http://localhost:3500`;
+
+      fetch(`${domain}/quickData`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+        });
+    </script>
+  </body>
+</html>
