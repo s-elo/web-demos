@@ -12,13 +12,13 @@
 
     "compilerOptions": {
         // which version
-        "target": "ES6",
+        "target": "es2020",
 
         // module methods
         "module": "es2015",
 
         // what libs used
-        "lib": ["ES6", "DOM"],
+        "lib": ["es2020", "DOM"],
 
         // output dir
         "outDir": "./dist",
