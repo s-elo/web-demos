@@ -38,7 +38,7 @@ function createTime() {
   const Day = Math.floor(diff / (3600 * 24));
   const Hour = Math.floor((diff % (3600 * 24)) / 3600);
   const Minute = Math.floor((diff % 3600) / 60);
-  const Second = Math.ceil(diff % 60);
+  const Second = Math.floor(diff % 60);
 
   render(
     formator({
