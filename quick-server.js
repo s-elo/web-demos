@@ -7,7 +7,10 @@ const open = require("open");
 const demo = express();
 const port = 3500;
 const [projectName] = process.argv.slice(2);
-const domain = `http://localhost:${port}/${projectName}`;
+
+const domain = `http://localhost:${port}/${
+  projectName ? projectName : "timer"
+}`;
 
 demo.use("/demos", express.static(__dirname + "/demos"));
 demo.use("/dist", express.static(__dirname + "/dist"));
@@ -20,7 +23,7 @@ demo.all("*", (_, res, next) => {
   next();
 });
 
-const projects = ["timer"];
+const projects = ["timer", 'quiz-app'];
 
 projects.forEach((project, index) => {
   demo.get(`/${project}`, (_, res) => {
@@ -38,7 +41,9 @@ demo.get("/data", (_, res) => {
   return res.send({ data: "get it" });
 });
 
-demo.listen(port, () => console.log(`${projectName} opened. Listening on ${domain}`));
+demo.listen(port, () =>
+  console.log(`Listening on port ${port}`)
+);
 
 // ts compile watcher
 exec("tsc -w");
