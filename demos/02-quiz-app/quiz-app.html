@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz-app</title>
+    <link rel="shortcut icon" href="https://t4.ftcdn.net/jpg/02/50/32/43/360_F_250324355_6nh8Q5iUdb499Q4v79hYMEcSlFpIBhn7.jpg" type="image/x-icon">
     <link
       rel="stylesheet/less"
       type="text/css"
@@ -14,27 +15,26 @@
   </head>
   <body>
     <main class="quiz-container">
-      <h2 class="question">Loading...</h2>
+      <h3 class="question">Loading...</h3>
       <section class="answer-options">
-        <input type="checkbox" class="answer-select"/>
-        <div class="answer">
-          testasdasdasdasdasdasdasdas dasdasdas dasdasdasdasdasdasds
-        </div>
-      </section>
-      <section class="answer-options">
-        <input type="checkbox" class="answer-select"/>
+        <input type="radio" name="ans" class="answer-select" />
         <div class="answer">test</div>
       </section>
       <section class="answer-options">
-        <input type="checkbox" class="answer-select"/>
+        <input type="radio" name="ans" class="answer-select" />
         <div class="answer">test</div>
       </section>
       <section class="answer-options">
-        <input type="checkbox" class="answer-select"/>
+        <input type="radio" name="ans" class="answer-select" />
         <div class="answer">test</div>
       </section>
-      <button>Submit</button>
+      <section class="answer-options">
+        <input type="radio" name="ans" class="answer-select" />
+        <div class="answer">test</div>
+      </section>
+      <button id="submit-btn">Submit</button>
     </main>
+
     <script type="module" src="dist/02-quiz-app/script/index.js"></script>
   </body>
 </html>

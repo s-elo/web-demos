@@ -18,12 +18,16 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
   background-color: #ecf0f1;
-  width: 500px;
+  width: 800px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  .result {
+    padding: 20px;
+    font-weight: bold;
+  }
   .question {
     padding: 10px 50px;
   }
@@ -32,6 +36,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    input[type="radio"] {
+      cursor: pointer;
+    }
     .answer {
         margin-left: 10px;
     }
