@@ -3,6 +3,9 @@ const axios = require("axios");
 const fs = require("fs");
 const { exec } = require("child_process");
 const open = require("open");
+const bodyParser = require('body-parser');
+// handle formdata
+const formidableMiddleware = require('express-formidable');
 
 const demo = express();
 const port = 3500;
@@ -11,6 +14,11 @@ const [projectName] = process.argv.slice(2);
 const domain = `http://localhost:${port}/${
   projectName ? projectName : "timer"
 }`;
+
+demo.use(bodyParser.json());
+demo.use(bodyParser.urlencoded({extended: false}));
+
+demo.use(formidableMiddleware());
 
 demo.use("/demos", express.static(__dirname + "/demos"));
 demo.use("/dist", express.static(__dirname + "/dist"));
@@ -42,7 +50,12 @@ demo.get("/data", (_, res) => {
 });
 
 demo.post('/uploadFileChunks', (req, res) => {
-  console.log(req.body);
+  const {fields: {hash}, files: {chunk}} = req;
+  
+  return res.send({
+    hash,
+    done: true
+  });
 });
 
 demo.listen(port, () =>

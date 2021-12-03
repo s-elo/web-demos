@@ -24,6 +24,7 @@ export function request(options: RequestOpts) {
       );
 
     const data = options.data ? options.data : null;
+    
     xhr.send(data);
     xhr.onload = (e) => {
       resolve({

@@ -1,6 +1,6 @@
 import { request } from "../../utils.js";
 
-const SIZE = 10 * 1024 * 1024;
+const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
 export function createFileChunk(file: File, chunkSize: number = SIZE) {
   const fileChunks = [];
@@ -31,6 +31,7 @@ export async function uploadFile(fileChunks: FileChunks) {
     .map((fileChunk) => {
       const { chunk, hash } = fileChunk;
       const formData = new FormData();
+
       formData.append("chunk", chunk);
       formData.append("hash", hash);
 
@@ -45,5 +46,5 @@ export async function uploadFile(fileChunks: FileChunks) {
       });
     });
 
-  await Promise.all(requestList);
+  return await Promise.all(requestList);
 }

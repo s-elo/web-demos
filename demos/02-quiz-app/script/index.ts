@@ -1,5 +1,5 @@
 import { Question } from "./type";
-import { capFirstOne } from "../../utiles.js";
+import { capFirstOne } from "../../utils.js";
 
 const questions = [
   {
