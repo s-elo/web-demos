@@ -4,7 +4,7 @@
   "description": "do some quick demo with a page and a server",
   "main": "quick-server.js",
   "scripts": {
-    "start": "node quick-server.js"
+    "start": "nodemon quick-server.js"
   },
   "author": "",
   "license": "ISC",

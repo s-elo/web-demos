@@ -23,7 +23,7 @@ demo.all("*", (_, res, next) => {
   next();
 });
 
-const projects = ["timer", 'quiz-app'];
+const projects = ["timer", 'quiz-app', 'big-file'];
 
 projects.forEach((project, index) => {
   demo.get(`/${project}`, (_, res) => {

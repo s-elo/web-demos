@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import "../../util.less";
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}
+#container {
+  padding: 20px;
+  .upload-area {
+    border-radius: 20px;
+    width: 30rem;
+    height: 30rem;
+    background-color: #fff;
+    .shadow-box();
+    padding: 20px;
+  }
+  .btn-class {
+    .btn(fit-content, fit-content, #3ca3e7, #3498db);
+    margin: 10px;
+  }
+}

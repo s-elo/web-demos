@@ -1,0 +1,20 @@
+.shadow-box {
+  box-shadow: 0 0 3px 3px rgba(0.1, 0.1, 0.1, 0.5);
+}
+.btn(@width, @height, @color, @hover-color) {
+    width: @width;  
+    height: @height;
+    padding: 5px;
+    background-color: @color;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    border: 0;
+    .shadow-box();
+    &:hover {
+      background-color: #3498db;
+    }
+    &:focus {
+      outline: none;
+    }
+}
