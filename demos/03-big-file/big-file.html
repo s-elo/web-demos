@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Timer</title>
+    <title>Big File Upload</title>
     <link
       rel="stylesheet/less"
       type="text/css"
@@ -17,9 +17,14 @@
       <section class="upload-area">
         <button id="select-btn" class="btn-class">Select</button>
         <input type="file" id="upload-input" style="display: none" />
+        <span class="file-name-display">No File Yet</span>
+        <br />
         <button id="upload-btn" class="btn-class">Upload+</button>
       </section>
     </div>
+    <script>
+      window.leo = 2;
+    </script>
     <script type="module" src="dist/03-big-file/script/index.js"></script>
   </body>
 </html>

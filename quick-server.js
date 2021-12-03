@@ -41,6 +41,10 @@ demo.get("/data", (_, res) => {
   return res.send({ data: "get it" });
 });
 
+demo.post('/uploadFileChunks', (req, res) => {
+  console.log(req.body);
+});
+
 demo.listen(port, () =>
   console.log(`Listening on port ${port}`)
 );
