@@ -37,7 +37,7 @@ export async function mergeFileRequest(fileName: string) {
   return await request({
     url: "/big-file/merge",
     method: "GET",
-    queryParams: { fileName },
+    queryParams: { fileName, size: SIZE },
   });
 }
 
