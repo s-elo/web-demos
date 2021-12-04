@@ -3,9 +3,9 @@ const axios = require("axios");
 const fs = require("fs");
 const { exec } = require("child_process");
 const open = require("open");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 // handle formdata
-const formidableMiddleware = require('express-formidable');
+const formidableMiddleware = require("express-formidable");
 
 const demo = express();
 const port = 3500;
@@ -16,8 +16,9 @@ const domain = `http://localhost:${port}/${
 }`;
 
 demo.use(bodyParser.json());
-demo.use(bodyParser.urlencoded({extended: false}));
+demo.use(bodyParser.urlencoded({ extended: false }));
 
+// handle formdata
 demo.use(formidableMiddleware());
 
 demo.use("/demos", express.static(__dirname + "/demos"));
@@ -31,7 +32,7 @@ demo.all("*", (_, res, next) => {
   next();
 });
 
-const projects = ["timer", 'quiz-app', 'big-file'];
+const projects = ["timer", "quiz-app", "big-file"];
 
 projects.forEach((project, index) => {
   demo.get(`/${project}`, (_, res) => {
@@ -49,18 +50,26 @@ demo.get("/data", (_, res) => {
   return res.send({ data: "get it" });
 });
 
-demo.post('/uploadFileChunks', (req, res) => {
-  const {fields: {hash}, files: {chunk}} = req;
-  
+demo.post("/uploadFileChunks", (req, res) => {
+  const {
+    fields: { hash },
+    files: { chunk },
+  } = req;
+  console.log(hash);
   return res.send({
     hash,
-    done: true
+    done: true,
   });
 });
 
-demo.listen(port, () =>
-  console.log(`Listening on port ${port}`)
-);
+demo.get("/merge", (req, res) => {
+  console.log(req.query.fileName);
+  return res.send({
+    done: true,
+  });
+});
+
+demo.listen(port, () => console.log(`Listening on port ${port}`));
 
 // ts compile watcher
 exec("tsc -w");

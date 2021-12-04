@@ -2,7 +2,7 @@ import { request } from "../../utils.js";
 
 const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
-export function createFileChunk(file: File, chunkSize: number = SIZE) {
+function createFileChunk(file: File, chunkSize: number = SIZE) {
   const fileChunks = [];
 
   let total = 0;
@@ -21,28 +21,41 @@ export function createFileChunk(file: File, chunkSize: number = SIZE) {
   return fileChunks;
 }
 
-type FileChunks = Array<{
-  chunk: Blob;
-  hash: string;
-}>;
+// type FileChunks = Array<{
+//   chunk: Blob;
+//   hash: string;
+// }>;
 
-export async function uploadFile(fileChunks: FileChunks) {
+export async function mergeFileRequest(fileName: string) {
+  return await request({
+    url: "/merge",
+    method: "GET",
+    queryParams: { fileName },
+  });
+}
+
+export async function uploadFile(file: File) {
+  const fileChunks = createFileChunk(file);
+
   const requestList = fileChunks
     .map((fileChunk) => {
       const { chunk, hash } = fileChunk;
       const formData = new FormData();
 
+      // file
       formData.append("chunk", chunk);
+      // fields
       formData.append("hash", hash);
+      formData.append("fileName", file.name);
 
       return formData;
     })
-    .map((formChunk) => {
+    .map((formData) => {
       // return the promise, then run them concurrently
       return request({
         url: "/uploadFileChunks",
         method: "POST",
-        data: formChunk,
+        data: formData,
       });
     });
 

@@ -1,5 +1,5 @@
 import { selectBtn, uploadInput, fileNameDisplay } from "./doms.js";
-import { createFileChunk, uploadFile } from "./fileProcess.js";
+import { uploadFile, mergeFileRequest } from "./fileProcess.js";
 
 export function selectBtnClick() {
   uploadInput.click();
@@ -17,14 +17,26 @@ export function uploadInputChange() {
   }
 }
 
+type ResponseType = {
+  hash: string;
+  done: boolean;
+};
+
 export async function uploadBtnClick() {
   if (!uploadInput.files) return;
 
   const [file] = uploadInput.files;
 
-  const fileChunks = createFileChunk(file);
-
   // upload chuncks concurrently
-  const res = await uploadFile(fileChunks);
+  const res = (await uploadFile(file)) as Array<ResponseType>;
   console.log(res);
+
+  const isAllDone = (res: ResponseType) => res.done === true;
+
+  // all chunks are received well, merge
+  if (res.every(isAllDone)) {
+    const res = await mergeFileRequest(file.name);
+
+    console.log(res);
+  }
 }
