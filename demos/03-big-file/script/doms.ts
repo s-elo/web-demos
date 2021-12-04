@@ -10,6 +10,7 @@ export const selectBtn = document.querySelector(
 export const fileNameDisplay = document.querySelector(
   ".file-name-display"
 ) as HTMLSpanElement;
+export const statusDom = document.querySelector("#status") as HTMLSpanElement;
 export const progressContainer = document.querySelector(
   "#progress-container"
 ) as HTMLSelectElement;
