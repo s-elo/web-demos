@@ -51,3 +51,7 @@ export function request(options: RequestOpts) {
     };
   });
 }
+
+export function setStyle(dom: HTMLElement, styleObj: object) {
+  Object.assign(dom.style, styleObj);
+}

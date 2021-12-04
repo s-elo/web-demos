@@ -13,7 +13,7 @@
   .upload-area {
     margin: auto;
     border-radius: 20px;
-    width: 60rem;
+    width: 80rem;
     height: fit-content;
     background-color: #fff;
     .shadow-box();
@@ -28,14 +28,14 @@
   }
 }
 #progress-container {
-  display: none;
+  // display: none;
   .total-progress {
     padding: 10px;
   }
   .progress-bar-container {
     display: inline-block;
     margin-right: 5px;
-    width: 90%;
+    width: 95%;
     height: 0.5rem;
     border: 1px solid black;
     border-radius: 5px;
@@ -63,8 +63,12 @@
       text-align: center;
     }
     .progress-show {
-      flex-grow: 5;
+      flex-grow: 6;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
     }
   }
 }

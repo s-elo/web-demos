@@ -1,4 +1,9 @@
-import { chunkProgressContainer, progressBar, progressNum } from "./doms.js";
+import {
+  chunkProgressContainer,
+  totalPercentDom,
+  totalPercentNumDom,
+} from "./doms.js";
+import { setStyle } from "././../../utils.js";
 
 type ChunkType = {
   chunk: Blob;
@@ -8,22 +13,48 @@ type ChunkType = {
 const getOrder = (chunkHash: string) =>
   Number(chunkHash.split(".")[1].split("-")[1]);
 
+// store the chunk loaded size
+const chunkProgress: number[] = [];
+
+function totalProgressSync(fileSize: number) {
+  const totalPercent =
+    (chunkProgress.reduce((total, percent) => total + percent, 0) / fileSize) *
+    100;
+
+  setStyle(totalPercentDom, {
+    width: `${totalPercent.toFixed(0)}%`,
+  });
+
+  totalPercentNumDom.innerText = `${totalPercent.toFixed(0)}%`;
+}
+
 // create different function for each chunk
-export function onProgressCreator(chunk: ChunkType) {
+export function onProgressCreator(chunk: ChunkType, fileSize: number) {
   return (event: ProgressEvent<EventTarget>) => {
-    console.log(event.loaded / event.total, chunk.hash);
+    // get the chunk index
+    const order = getOrder(chunk.hash);
+
     const progressBar = document.querySelector(
-      `#chunk-${getOrder(chunk.hash)}`
+      `#chunk-${order}`
     ) as HTMLDivElement;
     const progressNum = document.querySelector(
-      `#chunk-${getOrder(chunk.hash)}-num`
+      `#chunk-${order}-num`
     ) as HTMLSpanElement;
 
-    console.log(progressBar);
+    // calculate the chunk percentage
+    const percent = (event.loaded / event.total) * 100;
 
-    Object.assign(progressBar.style, {
-      width: `${((event.loaded / event.total) * 100).toFixed(0)}%`,
+    chunkProgress[order] = event.loaded;
+
+    // sync the total progress UI
+    totalProgressSync(fileSize);
+
+    // sync the chunk progress UI
+    setStyle(progressBar, {
+      width: `${percent.toFixed(0)}%`,
     });
+
+    progressNum.innerText = `${percent.toFixed(0)}%`;
   };
 }
 

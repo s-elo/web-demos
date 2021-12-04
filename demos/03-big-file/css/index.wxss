@@ -22,7 +22,7 @@
 #container .upload-area {
   margin: auto;
   border-radius: 20px;
-  width: 60rem;
+  width: 80rem;
   height: fit-content;
   background-color: #fff;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
@@ -49,16 +49,13 @@
 #container .btn-class:focus {
   outline: none;
 }
-#progress-container {
-  display: none;
-}
 #progress-container .total-progress {
   padding: 10px;
 }
 #progress-container .progress-bar-container {
   display: inline-block;
   margin-right: 5px;
-  width: 90%;
+  width: 95%;
   height: 0.5rem;
   border: 1px solid black;
   border-radius: 5px;
@@ -87,6 +84,10 @@
   text-align: center;
 }
 #progress-container .chunk-progress .progress-show {
-  flex-grow: 5;
+  flex-grow: 6;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
 }

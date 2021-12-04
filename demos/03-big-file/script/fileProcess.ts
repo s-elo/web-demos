@@ -42,8 +42,6 @@ export async function mergeFileRequest(fileName: string) {
 }
 
 export async function uploadFile(file: File) {
-  progressContainer.style.display = "block";
-  
   const fileChunks = createFileChunk(file);
 
   const requestList = fileChunks
@@ -65,7 +63,7 @@ export async function uploadFile(file: File) {
         url: "/big-file/uploadFileChunks",
         method: "POST",
         data: formData,
-        onProgress: onProgressCreator(fileChunks[index]),
+        onProgress: onProgressCreator(fileChunks[index], file.size),
       });
     });
 
