@@ -11,7 +11,7 @@ export function uploadInputChange() {
   const [file] = uploadInput.files;
 
   // update the UI
-  if (file.name) {
+  if (file && file.name) {
     fileNameDisplay.innerHTML = file.name;
     selectBtn.innerText = `Reselect`;
   }
@@ -26,6 +26,8 @@ export async function uploadBtnClick() {
   if (!uploadInput.files) return;
 
   const [file] = uploadInput.files;
+
+  if (!file) return;
 
   // upload chuncks concurrently
   const res = (await uploadFile(file)) as Array<ResponseType>;

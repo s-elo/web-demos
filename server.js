@@ -1,6 +1,6 @@
 const express = require("express");
-const axios = require("axios");
-const fs = require("fs");
+const fs = require("fs-extra");
+const path = require("path");
 const { exec } = require("child_process");
 const open = require("open");
 const bodyParser = require("body-parser");
@@ -33,40 +33,35 @@ demo.all("*", (_, res, next) => {
 });
 
 const projects = ["timer", "quiz-app", "big-file"];
+const routerDir = path.resolve(__dirname, ".", "routers");
 
 projects.forEach((project, index) => {
+  // eg: 03-big-file
+  const ProjectDirName = `${
+    index < 9 ? `0${index + 1}` : index + 1
+  }-${project}`;
+
+  // get the html files
   demo.get(`/${project}`, (_, res) => {
     const html = fs.readFileSync(
-      `./demos/${
-        index < 9 ? `0${index + 1}` : index + 1
-      }-${project}/${project}.html`,
+      `./demos/${ProjectDirName}/${project}.html`,
       "utf8"
     );
     return res.send(String(html));
   });
+
+  // use the routers
+  const routerFileName = `${routerDir}/${ProjectDirName}.js`;
+
+  // if the project uses the server
+  if (fs.existsSync(routerFileName)) {
+    const router = require(routerFileName);
+    demo.use(`/${project}`, router);
+  }
 });
 
 demo.get("/data", (_, res) => {
   return res.send({ data: "get it" });
-});
-
-demo.post("/uploadFileChunks", (req, res) => {
-  const {
-    fields: { hash },
-    files: { chunk },
-  } = req;
-  console.log(hash);
-  return res.send({
-    hash,
-    done: true,
-  });
-});
-
-demo.get("/merge", (req, res) => {
-  console.log(req.query.fileName);
-  return res.send({
-    done: true,
-  });
 });
 
 demo.listen(port, () => console.log(`Listening on port ${port}`));

@@ -28,7 +28,7 @@ function createFileChunk(file: File, chunkSize: number = SIZE) {
 
 export async function mergeFileRequest(fileName: string) {
   return await request({
-    url: "/merge",
+    url: "/big-file/merge",
     method: "GET",
     queryParams: { fileName },
   });
@@ -53,7 +53,7 @@ export async function uploadFile(file: File) {
     .map((formData) => {
       // return the promise, then run them concurrently
       return request({
-        url: "/uploadFileChunks",
+        url: "/big-file/uploadFileChunks",
         method: "POST",
         data: formData,
       });
