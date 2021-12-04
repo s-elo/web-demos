@@ -23,9 +23,9 @@ type ResponseType = {
 };
 
 function setStatusAnimation() {
-  let count = 1;
-  statusDom.innerText = `Transferring${".".repeat(count)}`;
+  statusDom.innerText = `Transferring...`;
 
+  let count = 1;
   return setInterval(() => {
     statusDom.innerText = `Transferring${".".repeat(count)}`;
     if (count === 3) {
@@ -57,9 +57,8 @@ export async function uploadBtnClick() {
 
     console.log(res);
 
-    // remove the status animation
     clearInterval(statusTimer);
-
-    statusDom.innerText = `Transfer Completed`;
+    
+    statusDom.innerText = `Transfer Completed!`;
   }
 }

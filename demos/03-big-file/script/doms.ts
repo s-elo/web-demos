@@ -7,10 +7,10 @@ export const uploadBtn = document.querySelector(
 export const selectBtn = document.querySelector(
   "#select-btn"
 ) as HTMLButtonElement;
+export const statusDom = document.querySelector("#status") as HTMLSpanElement;
 export const fileNameDisplay = document.querySelector(
   ".file-name-display"
 ) as HTMLSpanElement;
-export const statusDom = document.querySelector("#status") as HTMLSpanElement;
 export const progressContainer = document.querySelector(
   "#progress-container"
 ) as HTMLSelectElement;
