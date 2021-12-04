@@ -1,4 +1,5 @@
 import { request } from "../../utils.js";
+import { onProgressCreator, renderChunkProgress } from "./progress.js";
 
 const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
@@ -18,13 +19,11 @@ function createFileChunk(file: File, chunkSize: number = SIZE) {
     index++;
   }
 
+  // render the  progress UI
+  renderChunkProgress(fileChunks);
+
   return fileChunks;
 }
-
-type ChunkType = {
-  chunk: Blob;
-  hash: string;
-};
 
 // type FileChunks = Array<ChunkType>;
 
@@ -34,13 +33,6 @@ export async function mergeFileRequest(fileName: string) {
     method: "GET",
     queryParams: { fileName },
   });
-}
-
-// create different function for each chunk
-function onProgressCreator(chunks: ChunkType) {
-  return (event: ProgressEvent<EventTarget>) => {
-    console.log(event.loaded/event.total, chunks.hash);
-  };
 }
 
 export async function uploadFile(file: File) {
