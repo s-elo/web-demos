@@ -8,6 +8,7 @@ interface RequestOpts {
   data?: any;
   queryParams?: object;
   headers?: object;
+  onProgress?: (this: XMLHttpRequest, ev: ProgressEvent<EventTarget>) => any;
 }
 
 const domain = `http://localhost:3500`;
@@ -25,6 +26,8 @@ export function request(options: RequestOpts) {
     const { method, url } = options;
 
     const xhr = new XMLHttpRequest();
+    // listen the progress event
+    options.onProgress && (xhr.upload.onprogress = options.onProgress);
 
     if (method.toUpperCase() === "GET" && options.queryParams != null) {
       const { queryParams } = options;

@@ -21,10 +21,12 @@ function createFileChunk(file: File, chunkSize: number = SIZE) {
   return fileChunks;
 }
 
-// type FileChunks = Array<{
-//   chunk: Blob;
-//   hash: string;
-// }>;
+type ChunkType = {
+  chunk: Blob;
+  hash: string;
+};
+
+// type FileChunks = Array<ChunkType>;
 
 export async function mergeFileRequest(fileName: string) {
   return await request({
@@ -32,6 +34,13 @@ export async function mergeFileRequest(fileName: string) {
     method: "GET",
     queryParams: { fileName },
   });
+}
+
+// create different function for each chunk
+function onProgressCreator(chunks: ChunkType) {
+  return (event: ProgressEvent<EventTarget>) => {
+    console.log(event.loaded/event.total, chunks.hash);
+  };
 }
 
 export async function uploadFile(file: File) {
@@ -50,12 +59,13 @@ export async function uploadFile(file: File) {
 
       return formData;
     })
-    .map((formData) => {
+    .map((formData, index) => {
       // return the promise, then run them concurrently
       return request({
         url: "/big-file/uploadFileChunks",
         method: "POST",
         data: formData,
+        onProgress: onProgressCreator(fileChunks[index]),
       });
     });
 
