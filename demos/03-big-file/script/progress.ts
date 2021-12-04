@@ -4,19 +4,25 @@ type ChunkType = {
   chunk: Blob;
   hash: string;
 };
+
+const getOrder = (chunkHash: string) =>
+  Number(chunkHash.split(".")[1].split("-")[1]);
+
 // create different function for each chunk
 export function onProgressCreator(chunk: ChunkType) {
   return (event: ProgressEvent<EventTarget>) => {
     console.log(event.loaded / event.total, chunk.hash);
     const progressBar = document.querySelector(
-      `#chunk-${chunk.hash}`
+      `#chunk-${getOrder(chunk.hash)}`
     ) as HTMLDivElement;
     const progressNum = document.querySelector(
-      `#chunk-${chunk.hash}-num`
+      `#chunk-${getOrder(chunk.hash)}-num`
     ) as HTMLSpanElement;
 
+    console.log(progressBar);
+
     Object.assign(progressBar.style, {
-      width: `${(event.loaded / event.total * 100).toFixed(0)}%`,
+      width: `${((event.loaded / event.total) * 100).toFixed(0)}%`,
     });
   };
 }
@@ -33,9 +39,9 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
     )}MB</section>
     <section class="progress-show">
       <span class="progress-bar-container">
-        <div class="progress-bar" id="chunk-${hash}"></div>
+        <div class="progress-bar" id="chunk-${getOrder(hash)}"></div>
       </span>
-      <span class="progress-number" id="chunk-${hash}-num">0%</span>
+      <span class="progress-number" id="chunk-${getOrder(hash)}-num">0%</span>
     </section>
   </div>`;
 

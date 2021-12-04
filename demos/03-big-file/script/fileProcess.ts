@@ -1,9 +1,10 @@
 import { request } from "../../utils.js";
 import { onProgressCreator, renderChunkProgress } from "./progress.js";
+import { progressContainer } from "./doms.js";
 
 const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
-function createFileChunk(file: File, chunkSize: number = SIZE) {
+export function createFileChunk(file: File, chunkSize: number = SIZE) {
   const fileChunks = [];
 
   let total = 0;
@@ -25,7 +26,12 @@ function createFileChunk(file: File, chunkSize: number = SIZE) {
   return fileChunks;
 }
 
-// type FileChunks = Array<ChunkType>;
+export type ChunkType = {
+  chunk: Blob;
+  hash: string;
+};
+
+type FileChunks = Array<ChunkType>;
 
 export async function mergeFileRequest(fileName: string) {
   return await request({
@@ -36,6 +42,8 @@ export async function mergeFileRequest(fileName: string) {
 }
 
 export async function uploadFile(file: File) {
+  progressContainer.style.display = "block";
+  
   const fileChunks = createFileChunk(file);
 
   const requestList = fileChunks
