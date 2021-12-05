@@ -30,7 +30,7 @@ export async function createFileChunk(file: File, chunkSize: number = SIZE) {
 
   // generate real hash(only the hash for the whole file not chunks) for server
   const fileHash = await calculateHash(fileChunks);
-  
+
   // add the hash for each chunk
   fileChunks.forEach((chunk, index) => {
     chunk.hash = `${fileHash}-${index + 1}`;
@@ -58,11 +58,11 @@ function calculateHash(fileChunks: FileChunks) {
   });
 }
 
-export async function mergeFileRequest(fileName: string) {
+export async function mergeFileRequest(fileName: string, extendName: string) {
   return await request({
     url: "/big-file/merge",
     method: "GET",
-    queryParams: { fileName, size: SIZE },
+    queryParams: { fileName, extendName, size: SIZE },
   });
 }
 
@@ -78,7 +78,8 @@ export async function uploadFile(file: File) {
       formData.append("chunk", chunk);
       // fields
       formData.append("hash", hash);
-      formData.append("fileName", file.name);
+      // the filename is the hash
+      formData.append("fileName", hash.split("-")[0]);
 
       return formData;
     })

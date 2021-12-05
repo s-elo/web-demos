@@ -37,9 +37,9 @@ router.post("/uploadFileChunks", async (req, res) => {
 });
 
 router.get("/merge", async (req, res) => {
-  const { fileName, size } = req.query;
+  const { fileName, extendName, size } = req.query;
 
-  const filePath = path.resolve(UPLOAD_DIR, `${fileName}`);
+  const filePath = path.resolve(UPLOAD_DIR, `${fileName}.${extendName}`);
 
   try {
     await mergeFileChunks(filePath, fileName, Number(size));
