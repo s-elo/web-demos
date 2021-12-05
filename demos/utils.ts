@@ -55,3 +55,23 @@ export function request(options: RequestOpts) {
 export function setStyle(dom: HTMLElement, styleObj: object) {
   Object.assign(dom.style, styleObj);
 }
+
+// able to import the worker using import syntax
+export function BuildWorker(workerScript: () => void) {
+  // workerScript should be a function containing the worker script
+  // so that we can import the function using es6 import
+  if (!workerScript) return;
+
+  const scriptStr = workerScript.toString();
+  const reg = /^\s*function\s*\(\s*\)\s*\{(([\s\S](?!\}$))*[\s\S])/;
+
+  if (!scriptStr.match(reg)) return;
+
+  return new Worker(
+    window.URL.createObjectURL(
+      new Blob([(scriptStr.match(reg) as RegExpMatchArray)[1]], {
+        type: "text/javascript",
+      })
+    )
+  );
+}
