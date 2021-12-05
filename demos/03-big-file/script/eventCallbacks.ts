@@ -42,12 +42,20 @@ function setStatusAnimation(content: string) {
   return () => clearInterval(timer);
 }
 
+// false: no click; true: uploading
+let isUploading = false;
+
 export async function uploadBtnClick() {
+  // it is uploading
+  if (isUploading) return alert("It is uploading a file");
+
   if (!uploadInput.files) return;
 
   const [file] = uploadInput.files;
 
   if (!file) return;
+
+  isUploading = true;
 
   const clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
 
@@ -78,4 +86,6 @@ export async function uploadBtnClick() {
       statusDom.innerText = `sth wrong, please upload again!`;
     }
   }
+
+  isUploading = false;
 }

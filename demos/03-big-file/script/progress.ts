@@ -10,8 +10,7 @@ type ChunkType = {
   hash: string;
 };
 
-const getOrder = (chunkHash: string) =>
-  Number(chunkHash.split("-")[1]);
+const getOrder = (chunkHash: string) => Number(chunkHash.split("-")[1]);
 
 // store the chunk loaded size
 const chunkProgress: number[] = [];
@@ -58,9 +57,19 @@ export function onProgressCreator(chunk: ChunkType, fileSize: number) {
   };
 }
 
-export function renderChunkProgress(chunks: Array<ChunkType>) {
-  // clear
+export function clearProgress() {
+  setStyle(totalPercentDom, { width: "0%" });
+
+  totalPercentNumDom.innerText = `0%`;
+
   chunkProgressContainer.innerHTML = "";
+
+  chunkProgress.fill(0);
+}
+
+export function renderChunkProgress(chunks: Array<ChunkType>) {
+  // clear (it has been cleared at the clearProgress func)
+  // chunkProgressContainer.innerHTML = "";
 
   chunks.forEach(({ chunk, hash }) => {
     const progressHTML = `<div class="chunk-progress">

@@ -1,6 +1,15 @@
 import { request, BuildWorker } from "../../utils.js";
-import { onProgressCreator, renderChunkProgress } from "./progress.js";
-import { progressContainer } from "./doms.js";
+import {
+  onProgressCreator,
+  renderChunkProgress,
+  clearProgress,
+} from "./progress.js";
+// import {
+//   progressContainer,
+//   chunkProgressContainer,
+//   totalPercentDom,
+//   totalPercentNumDom,
+// } from "./doms.js";
 import genHashWorker from "./genHashWorker.js";
 
 const SIZE = 10 * 1024 * 1024; // 10MB per chunk
@@ -13,6 +22,8 @@ export type ChunkType = {
 type FileChunks = Array<ChunkType>;
 
 export async function createFileChunk(file: File, chunkSize: number = SIZE) {
+  clearProgress();
+
   const fileChunks = [];
 
   let total = 0;
