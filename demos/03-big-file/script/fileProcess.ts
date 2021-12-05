@@ -7,7 +7,7 @@ const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
 export type ChunkType = {
   chunk: Blob;
-  hash?: string;
+  hash: string;
 };
 
 type FileChunks = Array<ChunkType>;
@@ -66,9 +66,7 @@ export async function mergeFileRequest(fileName: string, extendName: string) {
   });
 }
 
-export async function uploadFile(file: File) {
-  const fileChunks = await createFileChunk(file);
-
+export async function uploadFile(file: File, fileChunks: FileChunks) {
   const requestList = fileChunks
     .map((fileChunk) => {
       const { chunk, hash } = fileChunk;

@@ -1,5 +1,9 @@
 import { selectBtn, uploadInput, fileNameDisplay, statusDom } from "./doms.js";
-import { uploadFile, mergeFileRequest } from "./fileProcess.js";
+import {
+  createFileChunk,
+  uploadFile,
+  mergeFileRequest,
+} from "./fileProcess.js";
 
 export function selectBtnClick() {
   uploadInput.click();
@@ -22,18 +26,20 @@ type ResponseType = {
   done: boolean;
 };
 
-function setStatusAnimation() {
-  statusDom.innerText = `Transferring...`;
+function setStatusAnimation(content: string) {
+  statusDom.innerText = `${content}...`;
 
   let count = 1;
-  return setInterval(() => {
-    statusDom.innerText = `Transferring${".".repeat(count)}`;
+  const timer = setInterval(() => {
+    statusDom.innerText = `${content}${".".repeat(count)}`;
     if (count === 3) {
       count = 1;
     } else {
       count++;
     }
   }, 1000);
+
+  return () => clearInterval(timer);
 }
 
 export async function uploadBtnClick() {
@@ -43,10 +49,16 @@ export async function uploadBtnClick() {
 
   if (!file) return;
 
-  const statusTimer = setStatusAnimation();
+  const clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
+
+  const fileChunks = await createFileChunk(file);
+
+  clearHashComputingStatus();
+
+  const clearTransferStatus = setStatusAnimation(`Transferring`);
 
   // upload chuncks concurrently
-  const res = (await uploadFile(file)) as Array<ResponseType>;
+  const res = (await uploadFile(file, fileChunks)) as Array<ResponseType>;
 
   const isAllDone = (res: ResponseType) => res.done === true;
 
@@ -58,7 +70,7 @@ export async function uploadBtnClick() {
 
     const ret = (await mergeFileRequest(fileName, extendName)) as ResponseType;
 
-    clearInterval(statusTimer);
+    clearTransferStatus();
 
     if (ret.done) {
       statusDom.innerText = `Transfer Completed!`;
