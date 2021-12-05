@@ -56,7 +56,7 @@ router.get("/merge", async (req, res) => {
 });
 
 function sortChunks(chunks) {
-  const getOrder = (ChunkName) => Number(ChunkName.split(".")[1].split("-")[1]);
+  const getOrder = (ChunkName) => Number(ChunkName.split("-")[1]);
 
   chunks.sort((a, b) => getOrder(a) - getOrder(b));
 }

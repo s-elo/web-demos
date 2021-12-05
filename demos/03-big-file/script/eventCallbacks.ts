@@ -47,18 +47,19 @@ export async function uploadBtnClick() {
 
   // upload chuncks concurrently
   const res = (await uploadFile(file)) as Array<ResponseType>;
-  console.log(res);
 
   const isAllDone = (res: ResponseType) => res.done === true;
 
   // all chunks are received well, merge
   if (res.every(isAllDone)) {
-    const res = await mergeFileRequest(file.name);
-
-    console.log(res);
+    const res = (await mergeFileRequest(file.name)) as ResponseType;
 
     clearInterval(statusTimer);
-    
-    statusDom.innerText = `Transfer Completed!`;
+
+    if (res.done) {
+      statusDom.innerText = `Transfer Completed!`;
+    } else {
+      statusDom.innerText = `sth wrong, please upload again!`;
+    }
   }
 }

@@ -5,6 +5,13 @@ import genHashWorker from "./genHashWorker.js";
 
 const SIZE = 10 * 1024 * 1024; // 10MB per chunk
 
+export type ChunkType = {
+  chunk: Blob;
+  hash?: string;
+};
+
+type FileChunks = Array<ChunkType>;
+
 export async function createFileChunk(file: File, chunkSize: number = SIZE) {
   const fileChunks = [];
 
@@ -14,29 +21,31 @@ export async function createFileChunk(file: File, chunkSize: number = SIZE) {
   while (total < file.size) {
     fileChunks.push({
       chunk: file.slice(total, total + chunkSize),
-      // the hash just for font-end UI
-      // the real hash should be based on the content of the file
-      // not the name of the file
-      hash: `${file.name}-${index}`,
+      hash: "",
     });
 
     total += chunkSize;
     index++;
   }
 
+  // generate real hash(only the hash for the whole file not chunks) for server
+  const fileHash = await calculateHash(fileChunks);
+  
+  // add the hash for each chunk
+  fileChunks.forEach((chunk, index) => {
+    chunk.hash = `${fileHash}-${index + 1}`;
+  });
+
   // render the  progress UI using the above hash
   renderChunkProgress(fileChunks);
-
-  // generate real hash for server
-  const ret = await calculateHash(fileChunks);
-
-  console.log(ret);
 
   return fileChunks;
 }
 
 function calculateHash(fileChunks: FileChunks) {
   return new Promise((res) => {
+    // use a worker to compute the hash
+    // so that the render process wont be blocked
     const hashWorker = BuildWorker(genHashWorker);
 
     if (!hashWorker) return res("no worker");
@@ -44,17 +53,10 @@ function calculateHash(fileChunks: FileChunks) {
     hashWorker.postMessage({ fileChunks });
 
     hashWorker.onmessage = (event) => {
-      res(event.data);
+      res(event.data.hash);
     };
   });
 }
-
-export type ChunkType = {
-  chunk: Blob;
-  hash: string;
-};
-
-type FileChunks = Array<ChunkType>;
 
 export async function mergeFileRequest(fileName: string) {
   return await request({

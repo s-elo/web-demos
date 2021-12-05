@@ -11,7 +11,7 @@ type ChunkType = {
 };
 
 const getOrder = (chunkHash: string) =>
-  Number(chunkHash.split(".")[1].split("-")[1]);
+  Number(chunkHash.split("-")[1]);
 
 // store the chunk loaded size
 const chunkProgress: number[] = [];

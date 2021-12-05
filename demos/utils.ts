@@ -66,7 +66,11 @@ export function BuildWorker(workerScript: () => void) {
   const reg = /^\s*function\s*\(\s*\)\s*\{(([\s\S](?!\}$))*[\s\S])/;
 
   if (!scriptStr.match(reg)) return;
-
+  
+  // window.URL.createObjectURL will generate the URL for the script string
+  // note that the new Worker script is run in the browser
+  // so the URL is generated based on the evrionment(origin) of the browser
+  // the type is js script, so URL can fetch the JS script
   return new Worker(
     window.URL.createObjectURL(
       new Blob([(scriptStr.match(reg) as RegExpMatchArray)[1]], {
