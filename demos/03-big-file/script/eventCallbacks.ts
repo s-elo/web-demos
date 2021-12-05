@@ -52,11 +52,15 @@ export async function uploadBtnClick() {
 
   // all chunks are received well, merge
   if (res.every(isAllDone)) {
-    const res = (await mergeFileRequest(file.name)) as ResponseType;
+    // use the hash as filename
+    const fileName = res[0].hash.split("-")[0];
+    const extendName = file.name.split(".")[1];
+
+    const ret = (await mergeFileRequest(fileName, extendName)) as ResponseType;
 
     clearInterval(statusTimer);
 
-    if (res.done) {
+    if (ret.done) {
       statusDom.innerText = `Transfer Completed!`;
     } else {
       statusDom.innerText = `sth wrong, please upload again!`;
