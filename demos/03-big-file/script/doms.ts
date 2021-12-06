@@ -35,3 +35,6 @@ export const pauseBtn = document.querySelector(
 export const recoverBtn = document.querySelector(
   "#recover-btn"
 ) as HTMLButtonElement;
+export const cancelBtn = document.querySelector(
+  "#cancel-btn"
+) as HTMLButtonElement;

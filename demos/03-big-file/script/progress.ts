@@ -77,6 +77,10 @@ export function clearProgress() {
   chunkProgressContainer.innerHTML = "";
 
   chunkProgress.fill(0);
+
+  pauseTotalPercent = 0;
+
+  statusDom.innerText = "";
 }
 
 export function renderUploadedProgress(uploadedChunks: Array<ChunkType>) {

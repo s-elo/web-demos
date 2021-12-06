@@ -4,6 +4,7 @@ import {
   uploadInput,
   pauseBtn,
   recoverBtn,
+  cancelBtn,
 } from "./doms.js";
 import {
   selectBtnClick,
@@ -11,6 +12,7 @@ import {
   uploadBtnClick,
   pauseBtnClick,
   recoverBtnClick,
+  cancelBtnClick,
 } from "./eventCallbacks.js";
 
 selectBtn.addEventListener("click", selectBtnClick);
@@ -22,3 +24,5 @@ uploadBtn.addEventListener("click", uploadBtnClick);
 pauseBtn.addEventListener("click", pauseBtnClick);
 
 recoverBtn.addEventListener("click", recoverBtnClick);
+
+cancelBtn.addEventListener("click", cancelBtnClick);

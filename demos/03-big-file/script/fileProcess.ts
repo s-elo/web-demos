@@ -8,7 +8,7 @@ import { onProgressCreator, clearProgress } from "./progress.js";
 // } from "./doms.js";
 import genHashWorker from "./genHashWorker.js";
 
-const SIZE = 10 * 1024 * 1024; // 10MB per chunk
+const SIZE = 3 * 1024 * 1024; // 3MB per chunk
 
 export type ChunkType = {
   chunk: Blob;

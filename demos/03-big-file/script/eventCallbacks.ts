@@ -1,8 +1,10 @@
 import {
   selectBtn,
   uploadInput,
+  uploadBtn,
   recoverBtn,
   pauseBtn,
+  cancelBtn,
   fileNameDisplay,
   statusDom,
   totalPercentNumDom,
@@ -33,6 +35,10 @@ type UploadCheckResponse = {
   uploadedChunks: Array<string>;
 };
 
+const INITIAL_STATUS = "INITIAL";
+const UPLOADING_STATUS = "UPLOADING";
+const PAUSING_STATUS = "PAUSING";
+
 // chunk upload xhr that has not been uploaded yet
 // (abort last time)
 const xhrList: Array<XMLHttpRequest> = [];
@@ -57,7 +63,6 @@ const isFileValidated = (uploadInput: HTMLInputElement) => {
 };
 
 export function selectBtnClick() {
-  if (isUploading) return alert('It is uploading a file');
   uploadInput.click();
 }
 
@@ -67,16 +72,18 @@ export function uploadInputChange() {
   if (file) {
     fileNameDisplay.innerHTML = file.name;
     selectBtn.innerText = `Reselect`;
+  } else {
+    fileNameDisplay.innerHTML = `No File Yet`;
+    selectBtn.innerText = `select`;
   }
 }
 
 export async function uploadBtnClick() {
-  // it is uploading
-  if (isUploading) return alert("It is uploading a file");
-
   const file = isFileValidated(uploadInput);
 
-  if (!file) return;
+  if (!file) return alert("please select your file");
+
+  btnStatusHandler(UPLOADING_STATUS);
 
   isUploading = true;
 
@@ -189,10 +196,7 @@ async function mergeFile(
 }
 
 export function pauseBtnClick() {
-  recoverBtn.disabled = false;
-  pauseBtn.disabled = true;
-  recoverBtn.classList.remove("btn-disable");
-  pauseBtn.classList.add("btn-disable");
+  btnStatusHandler(PAUSING_STATUS);
 
   xhrList.forEach((xhr) => {
     xhr.abort();
@@ -206,10 +210,7 @@ export function pauseBtnClick() {
 }
 
 export async function recoverBtnClick() {
-  recoverBtn.disabled = true;
-  pauseBtn.disabled = false;
-  recoverBtn.classList.add("btn-disable");
-  pauseBtn.classList.remove("btn-disable");
+  btnStatusHandler(UPLOADING_STATUS);
 
   // set being able to uploading again
   isUploading = false;
@@ -223,4 +224,57 @@ export async function recoverBtnClick() {
   // clear the file chunks and hash
   fileHash = "";
   fileChunks = [];
+}
+
+export function cancelBtnClick() {
+  if (!confirm("Do you want to cancel out the uploading?")) return;
+  // clear the UI and reset some of the params
+  clearTransferStatus();
+
+  xhrList.forEach((xhr) => {
+    xhr.abort();
+  });
+
+  // clear all the xhr
+  xhrList.length = 0;
+
+  clearProgress();
+
+  btnStatusHandler(INITIAL_STATUS);
+
+  // clear the file chunks and hash
+  fileHash = "";
+  fileChunks = [];
+
+  isUploading = false;
+}
+
+function setDisable(
+  btn: HTMLButtonElement | Array<HTMLButtonElement>,
+  disable: Boolean
+) {
+  if (Array.isArray(btn)) {
+    btn.forEach((b) => setDisable(b, disable));
+  } else {
+    if (disable) {
+      btn.disabled = true;
+      btn.classList.add("btn-disable");
+    } else {
+      btn.disabled = false;
+      btn.classList.remove("btn-disable");
+    }
+  }
+}
+
+function btnStatusHandler(status: string) {
+  if (status === "UPLOADING") {
+    setDisable([uploadBtn, selectBtn, recoverBtn], true);
+    setDisable([pauseBtn, cancelBtn], false);
+  } else if (status === "PAUSING") {
+    setDisable(pauseBtn, true);
+    setDisable(recoverBtn, false);
+  } else if (status === "INITIAL") {
+    setDisable([pauseBtn, recoverBtn, cancelBtn], true);
+    setDisable([uploadBtn, selectBtn], false);
+  }
 }
