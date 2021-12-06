@@ -19,8 +19,10 @@
         <input type="file" id="upload-input" style="display: none" />
         <span class="file-name-display">No File Yet</span>
         <br />
-        <button id="upload-btn" class="btn-class">Upload+</button>
-        <span id="status"></span>
+        <button id="upload-btn" class="btn-class">Upload</button>
+        <button id="pause-btn" class="btn-class">Pause</button>
+        <button id="recover-btn" class="btn-class">Recover</button>
+        <div id="status"></div>
         <hr />
         <section id="progress-container">
           <div class="total-progress">
@@ -28,7 +30,7 @@
             <span class="progress-bar-container">
               <div class="progress-bar" id="total-percent"></div>
             </span>
-            <span class="progress-number" id="total-percent-num">0%</span>
+            <span class="progress-number" id="total-percent-num" style=" color: #aaa3a3;">0%</span>
           </div>
           <div class="chunk-progress-container"></div>
         </section>

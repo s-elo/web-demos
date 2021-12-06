@@ -1,10 +1,17 @@
-import { selectBtn, uploadInput, fileNameDisplay, statusDom } from "./doms.js";
+import {
+  selectBtn,
+  uploadInput,
+  uploadBtn,
+  fileNameDisplay,
+  statusDom,
+} from "./doms.js";
 import {
   createFileChunk,
   calculateHash,
   uploadCheck,
   uploadFile,
   mergeFileRequest,
+  FileChunks,
 } from "./fileProcess.js";
 import {
   clearProgress,
@@ -18,8 +25,23 @@ type ResponseType = {
   done: boolean;
 };
 
+type UploadCheckResponse = {
+  isUploaded: Boolean;
+  uploadedChunks: Array<string>;
+};
+
+// chunk upload xhr that has not been uploaded yet
+// (abort last time)
+const xhrList: Array<XMLHttpRequest> = [];
+
+let fileHash = "";
+let fileChunks: FileChunks;
+
 // false: no click; true: uploading
 let isUploading = false;
+// need to be shared in uploadClik, pauseClick and recoverClick
+let clearHashComputingStatus = () => {};
+let clearTransferStatus = () => {};
 
 const isFileValidated = (uploadInput: HTMLInputElement) => {
   if (!uploadInput.files) return false;
@@ -54,43 +76,92 @@ export async function uploadBtnClick() {
 
   isUploading = true;
 
+  // only the pause and recover stage can get the value
+  const isPausing = fileHash !== "";
+
   // 0. clear the progress UI
-  clearProgress();
+  // if the hash can be accessed, it means we are pausing
+  !isPausing && clearProgress();
 
-  // 1. create the chunks
-  const clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
+  if (!isPausing) {
+    // 1. create the chunks
+    fileChunks = createFileChunk(file);
 
-  const fileChunks = await createFileChunk(file);
+    clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
 
-  // 2. generate real hash(only the hash for the whole file not chunks) for server
-  // note that after this, the hash has been added to each chunk
-  const fileHash = (await calculateHash(fileChunks)) as string;
+    // 2. generate real hash(only the hash for the whole file not chunks) for server
+    fileHash = (await calculateHash(fileChunks)) as string;
+
+    // add the hash for each chunk
+    fileChunks.forEach((chunk, index) => {
+      chunk.hash = `${fileHash}-${index + 1}`;
+    });
+
+    clearHashComputingStatus();
+  }
 
   // 3. render the  progress UI using the above hash
-  renderChunkProgress(fileChunks);
+  // if the hash can be accessed, it means we are pausing, no need to rerender
+  !isPausing && renderChunkProgress(fileChunks);
 
-  clearHashComputingStatus();
-
-  // 4. see is it is uploaded
+  // 4. see if it is uploaded or partially uploaded
   // use the hash as filename
   const extendName = file.name.split(".")[1];
 
-  const isUploaded = await uploadCheck(extendName, fileHash);
+  const { isUploaded, uploadedChunks } = (await uploadCheck(
+    extendName,
+    fileHash
+  )) as UploadCheckResponse;
 
-  // show the uploaded progress bars in a second
   if (isUploaded) {
+    // show the uploaded progress bars in a second
     renderSwiftUploadProgress(fileChunks);
+
+    // clear the file chunks and hash
+    fileHash = "";
+    fileChunks = [];
 
     isUploading = false;
 
     return;
   }
 
+  // filter the uploaded chunks
+  const uploadChunks = fileChunks.filter(
+    (chunk) => !uploadedChunks.includes(chunk.hash)
+  );
+
   // 5. upload the chunks concurrently
-  const clearTransferStatus = setStatusAnimation(`Transferring`);
+  clearTransferStatus = setStatusAnimation(`Transferring`);
 
-  const uploadRes = (await uploadFile(file, fileChunks)) as Array<ResponseType>;
+  const uploadRes = (await uploadFile(
+    file,
+    uploadChunks,
+    xhrList
+  )) as Array<ResponseType>;
 
+  const isMergeDone = await mergeFile(uploadRes, fileHash, extendName);
+
+  clearTransferStatus();
+
+  if (isMergeDone) {
+    statusDom.innerText = `Transfer Completed!`;
+  } else {
+    statusDom.innerText = `sth wrong, please upload again!`;
+  }
+
+  // clear the file chunks and hash
+  fileHash = "";
+  fileChunks = [];
+
+  isUploading = false;
+}
+
+async function mergeFile(
+  uploadRes: Array<ResponseType>,
+  fileHash: string,
+  extendName: string
+) {
   const isAllDone = (res: ResponseType) => res.done === true;
 
   // all chunks are received well, merge
@@ -103,13 +174,32 @@ export async function uploadBtnClick() {
     extendName
   )) as ResponseType;
 
+  return mergeRes.done;
+}
+
+export function pauseBtnClick() {
+  xhrList.forEach((xhr) => {
+    xhr.abort();
+  });
+
+  // clear all the xhr
+  xhrList.length = 0;
+
+  // stop the animation
   clearTransferStatus();
+}
 
-  if (mergeRes.done) {
-    statusDom.innerText = `Transfer Completed!`;
-  } else {
-    statusDom.innerText = `sth wrong, please upload again!`;
-  }
-
+export async function recoverBtnClick() {
+  // set being able to uploading again
   isUploading = false;
+
+  await uploadBtnClick();
+
+  const file = isFileValidated(uploadInput);
+
+  if (!file) return;
+
+  // clear the file chunks and hash
+  fileHash = "";
+  fileChunks = [];
 }

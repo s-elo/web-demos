@@ -62,15 +62,30 @@ router.post("/uploadCheck", async (req, res) => {
 
   const filePath = path.resolve(UPLOAD_DIR, `${hash}.${extendName}`);
 
-  // is uploaded
+  return res.send({ ...getUploadedState(hash, filePath) });
+});
+
+function getUploadedState(hash, filePath) {
+  // the chunks that has been uploaded
+  const uploadedChunks = [];
+
+  // 1. check the whole file if it is uploaded
   if (fs.existsSync(filePath)) {
-    return res.send({ done: true });
+    return { isUploaded: true, uploadedChunks };
   }
 
-  return res.send({
-    done: false,
-  });
-});
+  // 2. check the uploaded chunks
+  const chunkDir = path.resolve(UPLOAD_DIR, `${hash}-chunks`);
+
+  // hasnt been uploaded before
+  if (!fs.existsSync(chunkDir)) {
+    return { isUploaded: false, uploadedChunks };
+  }
+
+  // uploaded partially
+  // get all the chunk file names
+  return { isUploaded: false, uploadedChunks: fs.readdirSync(chunkDir) };
+}
 
 function sortChunks(chunks) {
   const getOrder = (ChunkName) => Number(ChunkName.split("-")[1]);

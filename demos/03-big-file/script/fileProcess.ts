@@ -1,8 +1,5 @@
 import { request, BuildWorker } from "../../utils.js";
-import {
-  onProgressCreator,
-  clearProgress,
-} from "./progress.js";
+import { onProgressCreator, clearProgress } from "./progress.js";
 // import {
 //   progressContainer,
 //   chunkProgressContainer,
@@ -18,9 +15,9 @@ export type ChunkType = {
   hash: string;
 };
 
-type FileChunks = Array<ChunkType>;
+export type FileChunks = Array<ChunkType>;
 
-export async function createFileChunk(file: File, chunkSize: number = SIZE) {
+export function createFileChunk(file: File, chunkSize: number = SIZE) {
   const fileChunks = [];
 
   let total = 0;
@@ -52,13 +49,6 @@ export function calculateHash(fileChunks: FileChunks) {
     hashWorker.onmessage = (event) => {
       res(event.data.hash);
     };
-  }).then((fileHash) => {
-    // add the hash for each chunk
-    fileChunks.forEach((chunk, index) => {
-      chunk.hash = `${fileHash}-${index + 1}`;
-    });
-
-    return fileHash;
   });
 }
 
@@ -70,7 +60,11 @@ export async function mergeFileRequest(fileName: string, extendName: string) {
   });
 }
 
-export async function uploadFile(file: File, fileChunks: FileChunks) {
+export async function uploadFile(
+  file: File,
+  fileChunks: FileChunks,
+  xhrList: Array<XMLHttpRequest>
+) {
   const requestList = fileChunks
     .map((fileChunk) => {
       const { chunk, hash } = fileChunk;
@@ -92,6 +86,7 @@ export async function uploadFile(file: File, fileChunks: FileChunks) {
         method: "POST",
         data: formData,
         onProgress: onProgressCreator(fileChunks[index], file.size),
+        requestList: xhrList,
       });
     });
 
@@ -107,5 +102,5 @@ export async function uploadCheck(extendName: string, hash: string) {
       "content-type": "application/json",
     },
     data: JSON.stringify({ hash, extendName }),
-  }).then((res) => (res as { done: Boolean }).done);
+  });
 }

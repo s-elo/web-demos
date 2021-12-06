@@ -29,3 +29,9 @@ export const totalPercentNumDom = document.querySelector(
 export const chunkProgressContainer = document.querySelector(
   ".chunk-progress-container"
 ) as HTMLDivElement;
+export const pauseBtn = document.querySelector(
+  "#pause-btn"
+) as HTMLButtonElement;
+export const recoverBtn = document.querySelector(
+  "#recover-btn"
+) as HTMLButtonElement;

@@ -31,6 +31,9 @@
 #container .upload-area .file-name-display {
   font-weight: bold;
 }
+#container .upload-area #status {
+  margin: 10px;
+}
 #container .btn-class {
   width: fit-content;
   height: fit-content;
@@ -57,13 +60,13 @@
   margin-right: 5px;
   width: 95%;
   height: 0.5rem;
-  border: 1px solid black;
+  background-color: #EDEFF3;
   border-radius: 5px;
 }
 #progress-container .progress-bar-container .progress-bar {
   width: 0%;
   height: 100%;
-  background-color: #2ecc71;
+  background-color: #589FF6;
   border-radius: 5px;
 }
 #progress-container .chunk-progress {

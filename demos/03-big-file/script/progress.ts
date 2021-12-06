@@ -82,7 +82,9 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
       <span class="progress-bar-container">
         <div class="progress-bar" id="chunk-${index + 1}"></div>
       </span>
-      <span class="progress-number" id="chunk-${index + 1}-num">0%</span>
+      <span class="progress-number" id="chunk-${
+        index + 1
+      }-num" style="color: #aaa3a3;">0%</span>
     </section>
   </div>`;
 
@@ -123,5 +125,9 @@ export function setStatusAnimation(content: string) {
     }
   }, 1000);
 
-  return () => clearInterval(timer);
+  return () => {
+    // maintain the three dots status
+    statusDom.innerText = `${content}...`;
+    clearInterval(timer);
+  };
 }
