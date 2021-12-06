@@ -7,6 +7,7 @@ import {
   mergeFileRequest,
 } from "./fileProcess.js";
 import {
+  clearProgress,
   renderChunkProgress,
   renderSwiftUploadProgress,
   setStatusAnimation,
@@ -53,6 +54,9 @@ export async function uploadBtnClick() {
 
   isUploading = true;
 
+  // 0. clear the progress UI
+  clearProgress();
+
   // 1. create the chunks
   const clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
 
@@ -74,7 +78,13 @@ export async function uploadBtnClick() {
   const isUploaded = await uploadCheck(extendName, fileHash);
 
   // show the uploaded progress bars in a second
-  if (isUploaded) return renderSwiftUploadProgress();
+  if (isUploaded) {
+    renderSwiftUploadProgress(fileChunks);
+
+    isUploading = false;
+
+    return;
+  }
 
   // 5. upload the chunks concurrently
   const clearTransferStatus = setStatusAnimation(`Transferring`);

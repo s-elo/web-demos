@@ -55,11 +55,20 @@ router.get("/merge", async (req, res) => {
   });
 });
 
-router.post('/uploadCheck', async (req, res) => {
-  console.log(req.fields);
+router.post("/uploadCheck", async (req, res) => {
+  const {
+    fields: { hash, extendName },
+  } = req;
+
+  const filePath = path.resolve(UPLOAD_DIR, `${hash}.${extendName}`);
+
+  // is uploaded
+  if (fs.existsSync(filePath)) {
+    return res.send({ done: true });
+  }
 
   return res.send({
-    done: false
+    done: false,
   });
 });
 

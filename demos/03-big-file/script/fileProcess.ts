@@ -1,7 +1,6 @@
 import { request, BuildWorker } from "../../utils.js";
 import {
   onProgressCreator,
-  renderChunkProgress,
   clearProgress,
 } from "./progress.js";
 // import {
@@ -22,8 +21,6 @@ export type ChunkType = {
 type FileChunks = Array<ChunkType>;
 
 export async function createFileChunk(file: File, chunkSize: number = SIZE) {
-  clearProgress();
-
   const fileChunks = [];
 
   let total = 0;
@@ -110,5 +107,5 @@ export async function uploadCheck(extendName: string, hash: string) {
       "content-type": "application/json",
     },
     data: JSON.stringify({ hash, extendName }),
-  });
+  }).then((res) => (res as { done: Boolean }).done);
 }

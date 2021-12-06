@@ -2,7 +2,7 @@ import {
   chunkProgressContainer,
   totalPercentDom,
   totalPercentNumDom,
-  statusDom
+  statusDom,
 } from "./doms.js";
 import { setStyle } from "././../../utils.js";
 
@@ -72,7 +72,7 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
   // clear (it has been cleared at the clearProgress func)
   // chunkProgressContainer.innerHTML = "";
 
-  chunks.forEach(({ chunk, hash }) => {
+  chunks.forEach(({ chunk, hash }, index) => {
     const progressHTML = `<div class="chunk-progress">
     <section class="chunk-name">${hash}</section>
     <section class="chunk-size">${(chunk.size / (1024 * 1024)).toFixed(
@@ -80,9 +80,9 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
     )}MB</section>
     <section class="progress-show">
       <span class="progress-bar-container">
-        <div class="progress-bar" id="chunk-${getOrder(hash)}"></div>
+        <div class="progress-bar" id="chunk-${index + 1}"></div>
       </span>
-      <span class="progress-number" id="chunk-${getOrder(hash)}-num">0%</span>
+      <span class="progress-number" id="chunk-${index + 1}-num">0%</span>
     </section>
   </div>`;
 
@@ -90,8 +90,24 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
   });
 }
 
-export function renderSwiftUploadProgress() {
-  alert('uploaded');
+export function renderSwiftUploadProgress(chunks: Array<ChunkType>) {
+  setStyle(totalPercentDom, { width: "100%" });
+
+  totalPercentNumDom.innerText = "100%";
+
+  chunks.forEach((_, index) => {
+    const progressBar = document.querySelector(
+      `#chunk-${index + 1}`
+    ) as HTMLDivElement;
+    const progressNum = document.querySelector(
+      `#chunk-${index + 1}-num`
+    ) as HTMLSpanElement;
+
+    setStyle(progressBar, { width: "100%" });
+    progressNum.innerText = "100%";
+  });
+
+  statusDom.innerText = `Transfer Completed!`;
 }
 
 export function setStatusAnimation(content: string) {
