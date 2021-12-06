@@ -55,6 +55,14 @@ router.get("/merge", async (req, res) => {
   });
 });
 
+router.post('/uploadCheck', async (req, res) => {
+  console.log(req.fields);
+
+  return res.send({
+    done: false
+  });
+});
+
 function sortChunks(chunks) {
   const getOrder = (ChunkName) => Number(ChunkName.split("-")[1]);
 

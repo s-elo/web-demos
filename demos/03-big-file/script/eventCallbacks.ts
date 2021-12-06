@@ -1,90 +1,104 @@
 import { selectBtn, uploadInput, fileNameDisplay, statusDom } from "./doms.js";
 import {
   createFileChunk,
+  calculateHash,
+  uploadCheck,
   uploadFile,
   mergeFileRequest,
 } from "./fileProcess.js";
-
-export function selectBtnClick() {
-  uploadInput.click();
-}
-
-export function uploadInputChange() {
-  if (!uploadInput.files) return;
-
-  const [file] = uploadInput.files;
-
-  // update the UI
-  if (file && file.name) {
-    fileNameDisplay.innerHTML = file.name;
-    selectBtn.innerText = `Reselect`;
-  }
-}
+import {
+  renderChunkProgress,
+  renderSwiftUploadProgress,
+  setStatusAnimation,
+} from "./progress.js";
 
 type ResponseType = {
   hash: string;
   done: boolean;
 };
 
-function setStatusAnimation(content: string) {
-  statusDom.innerText = `${content}...`;
-
-  let count = 1;
-  const timer = setInterval(() => {
-    statusDom.innerText = `${content}${".".repeat(count)}`;
-    if (count === 3) {
-      count = 1;
-    } else {
-      count++;
-    }
-  }, 1000);
-
-  return () => clearInterval(timer);
-}
-
 // false: no click; true: uploading
 let isUploading = false;
+
+const isFileValidated = (uploadInput: HTMLInputElement) => {
+  if (!uploadInput.files) return false;
+
+  const [file] = uploadInput.files;
+
+  if (!file || !file.name) return false;
+
+  return file;
+};
+
+export function selectBtnClick() {
+  uploadInput.click();
+}
+
+export function uploadInputChange() {
+  const file = isFileValidated(uploadInput);
+
+  if (file) {
+    fileNameDisplay.innerHTML = file.name;
+    selectBtn.innerText = `Reselect`;
+  }
+}
 
 export async function uploadBtnClick() {
   // it is uploading
   if (isUploading) return alert("It is uploading a file");
 
-  if (!uploadInput.files) return;
-
-  const [file] = uploadInput.files;
+  const file = isFileValidated(uploadInput);
 
   if (!file) return;
 
   isUploading = true;
 
+  // 1. create the chunks
   const clearHashComputingStatus = setStatusAnimation(`Computing Hash`);
 
   const fileChunks = await createFileChunk(file);
 
+  // 2. generate real hash(only the hash for the whole file not chunks) for server
+  // note that after this, the hash has been added to each chunk
+  const fileHash = (await calculateHash(fileChunks)) as string;
+
+  // 3. render the  progress UI using the above hash
+  renderChunkProgress(fileChunks);
+
   clearHashComputingStatus();
 
+  // 4. see is it is uploaded
+  // use the hash as filename
+  const extendName = file.name.split(".")[1];
+
+  const isUploaded = await uploadCheck(extendName, fileHash);
+
+  // show the uploaded progress bars in a second
+  if (isUploaded) return renderSwiftUploadProgress();
+
+  // 5. upload the chunks concurrently
   const clearTransferStatus = setStatusAnimation(`Transferring`);
 
-  // upload chuncks concurrently
-  const res = (await uploadFile(file, fileChunks)) as Array<ResponseType>;
+  const uploadRes = (await uploadFile(file, fileChunks)) as Array<ResponseType>;
 
   const isAllDone = (res: ResponseType) => res.done === true;
 
   // all chunks are received well, merge
-  if (res.every(isAllDone)) {
-    // use the hash as filename
-    const fileName = res[0].hash.split("-")[0];
-    const extendName = file.name.split(".")[1];
+  if (!uploadRes.every(isAllDone))
+    return alert("upload failed, please upload again~");
 
-    const ret = (await mergeFileRequest(fileName, extendName)) as ResponseType;
+  // 6. merge the chunks
+  const mergeRes = (await mergeFileRequest(
+    fileHash,
+    extendName
+  )) as ResponseType;
 
-    clearTransferStatus();
+  clearTransferStatus();
 
-    if (ret.done) {
-      statusDom.innerText = `Transfer Completed!`;
-    } else {
-      statusDom.innerText = `sth wrong, please upload again!`;
-    }
+  if (mergeRes.done) {
+    statusDom.innerText = `Transfer Completed!`;
+  } else {
+    statusDom.innerText = `sth wrong, please upload again!`;
   }
 
   isUploading = false;

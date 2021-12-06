@@ -3,7 +3,6 @@ const fs = require("fs-extra");
 const path = require("path");
 const { exec } = require("child_process");
 const open = require("open");
-const bodyParser = require("body-parser");
 // handle formdata
 const formidableMiddleware = require("express-formidable");
 
@@ -15,10 +14,7 @@ const domain = `http://localhost:${port}/${
   projectName ? projectName : "timer"
 }`;
 
-demo.use(bodyParser.json());
-demo.use(bodyParser.urlencoded({ extended: false }));
-
-// handle formdata
+// handle formdata and post method
 demo.use(formidableMiddleware());
 
 demo.use("/demos", express.static(__dirname + "/demos"));

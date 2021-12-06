@@ -2,6 +2,7 @@ import {
   chunkProgressContainer,
   totalPercentDom,
   totalPercentNumDom,
+  statusDom
 } from "./doms.js";
 import { setStyle } from "././../../utils.js";
 
@@ -87,4 +88,24 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
 
     chunkProgressContainer.insertAdjacentHTML("beforeend", progressHTML);
   });
+}
+
+export function renderSwiftUploadProgress() {
+  alert('uploaded');
+}
+
+export function setStatusAnimation(content: string) {
+  statusDom.innerText = `${content}...`;
+
+  let count = 1;
+  const timer = setInterval(() => {
+    statusDom.innerText = `${content}${".".repeat(count)}`;
+    if (count === 3) {
+      count = 1;
+    } else {
+      count++;
+    }
+  }, 1000);
+
+  return () => clearInterval(timer);
 }

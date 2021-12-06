@@ -39,21 +39,10 @@ export async function createFileChunk(file: File, chunkSize: number = SIZE) {
     index++;
   }
 
-  // generate real hash(only the hash for the whole file not chunks) for server
-  const fileHash = await calculateHash(fileChunks);
-
-  // add the hash for each chunk
-  fileChunks.forEach((chunk, index) => {
-    chunk.hash = `${fileHash}-${index + 1}`;
-  });
-
-  // render the  progress UI using the above hash
-  renderChunkProgress(fileChunks);
-
   return fileChunks;
 }
 
-function calculateHash(fileChunks: FileChunks) {
+export function calculateHash(fileChunks: FileChunks) {
   return new Promise((res) => {
     // use a worker to compute the hash
     // so that the render process wont be blocked
@@ -66,6 +55,13 @@ function calculateHash(fileChunks: FileChunks) {
     hashWorker.onmessage = (event) => {
       res(event.data.hash);
     };
+  }).then((fileHash) => {
+    // add the hash for each chunk
+    fileChunks.forEach((chunk, index) => {
+      chunk.hash = `${fileHash}-${index + 1}`;
+    });
+
+    return fileHash;
   });
 }
 
@@ -103,4 +99,16 @@ export async function uploadFile(file: File, fileChunks: FileChunks) {
     });
 
   return await Promise.all(requestList);
+}
+
+// to see if it is uploaded or not
+export async function uploadCheck(extendName: string, hash: string) {
+  return await request({
+    url: "/big-file/uploadCheck",
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    data: JSON.stringify({ hash, extendName }),
+  });
 }
