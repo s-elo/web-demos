@@ -134,6 +134,8 @@ export async function uploadBtnClick() {
 
     isUploading = false;
 
+    btnStatusHandler(INITIAL_STATUS);
+
     return;
   }
 
@@ -173,6 +175,8 @@ export async function uploadBtnClick() {
   fileChunks = [];
 
   isUploading = false;
+
+  btnStatusHandler(INITIAL_STATUS);
 }
 
 async function mergeFile(

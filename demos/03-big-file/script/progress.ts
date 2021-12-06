@@ -104,8 +104,10 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
   // clear (it has been cleared at the clearProgress func)
   // chunkProgressContainer.innerHTML = "";
 
+  let progressHTML = ``;
+
   chunks.forEach(({ chunk, hash }, index) => {
-    const progressHTML = `<div class="chunk-progress">
+    progressHTML += `<div class="chunk-progress">
     <section class="chunk-name">${hash}</section>
     <section class="chunk-size">${(chunk.size / (1024 * 1024)).toFixed(
       2
@@ -119,9 +121,9 @@ export function renderChunkProgress(chunks: Array<ChunkType>) {
       }-num" style="color: #aaa3a3;">0%</span>
     </section>
   </div>`;
-
-    chunkProgressContainer.insertAdjacentHTML("beforeend", progressHTML);
   });
+
+  chunkProgressContainer.insertAdjacentHTML("beforeend", progressHTML);
 }
 
 export function renderSwiftUploadProgress(chunks: Array<ChunkType>) {

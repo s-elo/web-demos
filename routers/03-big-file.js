@@ -14,16 +14,20 @@ router.post("/uploadFileChunks", async (req, res) => {
     files: { chunk },
   } = req;
 
-  const chunkDir = path.resolve(UPLOAD_DIR, `${fileName}-chunks`);
-
   try {
-    // empty the dir, if no such dir,
     // create one for the file to store the chunks
-    await fs.emptyDir(chunkDir);
+    const chunkDir = path.resolve(UPLOAD_DIR, `${fileName}-chunks`);
+
+    if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR);
+
+    if (!fs.existsSync(chunkDir)) {
+      fs.mkdirSync(chunkDir);
+    }
 
     // move the temp chunk file to the file in chunkDir
     await fs.move(chunk.path, `${chunkDir}/${hash}`);
-  } catch {
+  } catch (err) {
+    console.log(err);
     return res.send({
       hash,
       done: false,
