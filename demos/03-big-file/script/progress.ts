@@ -68,6 +68,23 @@ export function clearProgress() {
   chunkProgress.fill(0);
 }
 
+export function renderUploadedProgress(uploadedChunks: Array<ChunkType>) {
+  uploadedChunks.forEach((chunk, _) => {
+    const progressBar = document.querySelector(
+      `#chunk-${getOrder(chunk.hash)}`
+    ) as HTMLDivElement;
+    const progressNum = document.querySelector(
+      `#chunk-${getOrder(chunk.hash)}-num`
+    ) as HTMLSpanElement;
+
+    setStyle(progressBar, { width: "100%" });
+    progressNum.innerText = "100%";
+
+    // sync the chunkProgress array
+    chunkProgress[getOrder(chunk.hash)] = chunk.chunk.size;
+  });
+}
+
 export function renderChunkProgress(chunks: Array<ChunkType>) {
   // clear (it has been cleared at the clearProgress func)
   // chunkProgressContainer.innerHTML = "";
@@ -97,17 +114,7 @@ export function renderSwiftUploadProgress(chunks: Array<ChunkType>) {
 
   totalPercentNumDom.innerText = "100%";
 
-  chunks.forEach((_, index) => {
-    const progressBar = document.querySelector(
-      `#chunk-${index + 1}`
-    ) as HTMLDivElement;
-    const progressNum = document.querySelector(
-      `#chunk-${index + 1}-num`
-    ) as HTMLSpanElement;
-
-    setStyle(progressBar, { width: "100%" });
-    progressNum.innerText = "100%";
-  });
+  renderUploadedProgress(chunks);
 
   statusDom.innerText = `Transfer Completed!`;
 }

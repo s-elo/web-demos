@@ -1,7 +1,8 @@
 import {
   selectBtn,
   uploadInput,
-  uploadBtn,
+  recoverBtn,
+  pauseBtn,
   fileNameDisplay,
   statusDom,
 } from "./doms.js";
@@ -17,6 +18,7 @@ import {
   clearProgress,
   renderChunkProgress,
   renderSwiftUploadProgress,
+  renderUploadedProgress,
   setStatusAnimation,
 } from "./progress.js";
 
@@ -108,7 +110,7 @@ export async function uploadBtnClick() {
   // use the hash as filename
   const extendName = file.name.split(".")[1];
 
-  const { isUploaded, uploadedChunks } = (await uploadCheck(
+  const { isUploaded, uploadedChunks: uploadedHashs } = (await uploadCheck(
     extendName,
     fileHash
   )) as UploadCheckResponse;
@@ -128,8 +130,15 @@ export async function uploadBtnClick() {
 
   // filter the uploaded chunks
   const uploadChunks = fileChunks.filter(
-    (chunk) => !uploadedChunks.includes(chunk.hash)
+    (chunk) => !uploadedHashs.includes(chunk.hash)
   );
+
+  // filter the chunks that need to be uploaded
+  const uploadedChunks = fileChunks.filter((chunk) =>
+    uploadedHashs.includes(chunk.hash)
+  );
+
+  renderUploadedProgress(uploadedChunks);
 
   // 5. upload the chunks concurrently
   clearTransferStatus = setStatusAnimation(`Transferring`);
@@ -178,6 +187,9 @@ async function mergeFile(
 }
 
 export function pauseBtnClick() {
+  recoverBtn.disabled = false;
+  pauseBtn.disabled = true;
+
   xhrList.forEach((xhr) => {
     xhr.abort();
   });
@@ -190,6 +202,9 @@ export function pauseBtnClick() {
 }
 
 export async function recoverBtnClick() {
+  recoverBtn.disabled = true;
+  pauseBtn.disabled = false;
+
   // set being able to uploading again
   isUploading = false;
 
