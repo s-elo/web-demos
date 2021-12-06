@@ -37,13 +37,12 @@
 #container .btn-class {
   width: fit-content;
   height: fit-content;
-  padding: 5px;
+  padding: 10px;
   background-color: #47a7e7;
   border-radius: 5px;
   outline: none;
   cursor: pointer;
   border: 0;
-  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
   margin: 10px;
 }
 #container .btn-class:hover {
@@ -51,6 +50,12 @@
 }
 #container .btn-class:focus {
   outline: none;
+}
+#container .btn-disable {
+  cursor: default;
+}
+#container .btn-disable:hover {
+  background-color: #47a7e7;
 }
 #progress-container .total-progress {
   padding: 10px;
@@ -60,13 +65,13 @@
   margin-right: 5px;
   width: 95%;
   height: 0.5rem;
-  background-color: #EDEFF3;
+  background-color: #edeff3;
   border-radius: 5px;
 }
 #progress-container .progress-bar-container .progress-bar {
   width: 0%;
   height: 100%;
-  background-color: #589FF6;
+  background-color: #589ff6;
   border-radius: 5px;
 }
 #progress-container .chunk-progress {

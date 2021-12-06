@@ -5,6 +5,7 @@ import {
   pauseBtn,
   fileNameDisplay,
   statusDom,
+  totalPercentNumDom,
 } from "./doms.js";
 import {
   createFileChunk,
@@ -56,6 +57,7 @@ const isFileValidated = (uploadInput: HTMLInputElement) => {
 };
 
 export function selectBtnClick() {
+  if (isUploading) return alert('It is uploading a file');
   uploadInput.click();
 }
 
@@ -189,6 +191,8 @@ async function mergeFile(
 export function pauseBtnClick() {
   recoverBtn.disabled = false;
   pauseBtn.disabled = true;
+  recoverBtn.classList.remove("btn-disable");
+  pauseBtn.classList.add("btn-disable");
 
   xhrList.forEach((xhr) => {
     xhr.abort();
@@ -204,6 +208,8 @@ export function pauseBtnClick() {
 export async function recoverBtnClick() {
   recoverBtn.disabled = true;
   pauseBtn.disabled = false;
+  recoverBtn.classList.add("btn-disable");
+  pauseBtn.classList.remove("btn-disable");
 
   // set being able to uploading again
   isUploading = false;

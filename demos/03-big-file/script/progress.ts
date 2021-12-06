@@ -15,17 +15,28 @@ const getOrder = (chunkHash: string) => Number(chunkHash.split("-")[1]);
 
 // store the chunk loaded size
 const chunkProgress: number[] = [];
+let pauseTotalPercent = 0;
 
 function totalProgressSync(fileSize: number) {
+  // reset
+  if (pauseTotalPercent === 100) pauseTotalPercent = 0;
+
   const totalPercent =
     (chunkProgress.reduce((total, percent) => total + percent, 0) / fileSize) *
     100;
 
-  setStyle(totalPercentDom, {
-    width: `${totalPercent.toFixed(0)}%`,
-  });
+  // only when the current total percent is greater than the pauseTotalPercent
+  // the bar will move, and update the pauseTotalPercent
+  if (totalPercent > pauseTotalPercent) {
+    setStyle(totalPercentDom, {
+      width: `${totalPercent.toFixed(0)}%`,
+    });
 
-  totalPercentNumDom.innerText = `${totalPercent.toFixed(0)}%`;
+    totalPercentNumDom.innerText = `${totalPercent.toFixed(0)}%`;
+
+    // keep tracking the total percent for the recover stage
+    pauseTotalPercent = totalPercent;
+  }
 }
 
 // create different function for each chunk
