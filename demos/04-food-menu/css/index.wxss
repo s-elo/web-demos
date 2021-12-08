@@ -17,7 +17,7 @@
   user-select: none;
 }
 .container {
-  margin: 20px auto;
+  margin: 100px auto;
   width: 400px;
   height: 650px;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
@@ -105,4 +105,7 @@
   padding: 10px;
   align-items: center;
   font-weight: bold;
+}
+.container .menu-list .menu .menu-info button {
+  margin-left: 5px;
 }

@@ -5,6 +5,7 @@ export function capFirstOne(str: string) {
 interface RequestOpts {
   url: string;
   method: string;
+  remoteURL?: Boolean; // the domain is remote
   data?: any;
   queryParams?: object;
   headers?: object;
@@ -37,9 +38,17 @@ export function request(options: RequestOpts) {
     if (method.toUpperCase() === "GET" && options.queryParams != null) {
       const { queryParams } = options;
 
-      xhr.open(method, `${domain}${url}${queryFormatter(queryParams)}`);
+      if (options.remoteURL) {
+        xhr.open(method, `${url}${queryFormatter(queryParams)}`);
+      } else {
+        xhr.open(method, `${domain}${url}${queryFormatter(queryParams)}`);
+      }
     } else {
-      xhr.open(method, `${domain}${url}`);
+      if (options.remoteURL) {
+        xhr.open(method, `${url}`);
+      } else {
+        xhr.open(method, `${domain}${url}`);
+      }
     }
 
     options.headers &&
