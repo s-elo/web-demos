@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrFJA.ttf) format('truetype');
+}
+.shadow-box {
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+}
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  user-select: none;
+}
+.container {
+  margin: 20px auto;
+  width: 400px;
+  height: 650px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+  background-color: #e6e6e6;
+  display: flex;
+  flex-direction: column;
+}
+.container button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+.container header {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  padding-left: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+}
+.container header input {
+  margin-right: 10px;
+  outline: none;
+  border: none;
+  background-color: #e6e6e6;
+  border-radius: 5px;
+}
+.container .fav-list {
+  padding: 10px 0;
+  width: 100%;
+  height: fit-content;
+}
+.container .fav-list ul {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  justify-content: flex-start;
+  list-style: none;
+  text-align: center;
+}
+.container .fav-list ul img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+}
+.container .menu-list {
+  flex: auto;
+  margin-top: 10px;
+  width: 100%;
+  height: fit-content;
+  overflow: auto;
+  background-color: #fff;
+}
+.container .menu-list .menu {
+  width: 80%;
+  height: 18rem;
+  margin: 20px auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+}
+.container .menu-list .menu img {
+  width: 100%;
+  height: 15rem;
+}
+.container .menu-list .menu .tag {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  background-color: #fff;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+  padding: 0px 5px;
+}
+.container .menu-list .menu .menu-info {
+  width: 100%;
+  height: 3rem;
+  border-top: 1px solid #7a7777;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+  font-weight: bold;
+}
