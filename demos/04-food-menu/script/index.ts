@@ -1,28 +1,55 @@
 import { request } from "../../utils.js";
 
 const menuListDom = document.querySelector(".menu-list") as HTMLElement;
-const favListDom = document.querySelector(".fav-list ul");
+const favListDom = document.querySelector(".fav-list ul") as HTMLUListElement;
+const searchBtn = document.querySelector("#search-btn") as HTMLButtonElement;
+const searchInput = document.querySelector("#search-input") as HTMLInputElement;
 
 interface MenuType {
   strMealThumb: string;
   idMeal: string;
   strMeal: string;
 }
+type RespType = Array<{ meals: Array<MenuType> }>;
 
 (async () => {
-  const meals = (await getRandomMeals(2)) as Array<{ meals: Array<MenuType> }>;
+  const meals = (await getRandomMeals(2)) as RespType;
 
   meals.forEach((meal) => {
-    renderMealList(meal.meals[0], true);
+    renderMeal(meal.meals[0], true);
   });
 
-  const favMeals = (await getFavList()) as Array<{ meals: Array<MenuType> }>;
-  console.log(favMeals);
+  const favMeals = (await getFavList()) as RespType;
 
   favMeals.forEach((meal) => {
     renderFavMeal(meal.meals[0]);
   });
 })();
+
+searchBtn?.addEventListener("click", async () => {
+  const keyword = searchInput.value;
+
+  const searchMeals = (await getMealsBySearch(keyword)) as RespType | null;
+
+  // clear
+  menuListDom.innerHTML = "";
+
+  if (searchMeals) {
+    if (searchMeals[0].meals == null) {
+      const meals = (await getRandomMeals(2)) as RespType;
+      meals.forEach((m) => {
+        renderMeal(m.meals[0], true);
+      });
+    } else {
+      renderMeal(searchMeals[0].meals[0], false);
+    }
+  } else {
+    const meals = (await getRandomMeals(2)) as RespType;
+    meals.forEach((m) => {
+      renderMeal(m.meals[0], true);
+    });
+  }
+});
 
 function addToFavList(mealId: string) {
   const favMeals = getFavIds();
@@ -48,24 +75,31 @@ function getFavIds() {
 async function getFavList() {
   const ids = getFavIds();
 
-  return Promise.all(
-    ids.map((id) => {
-      return request({
-        url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
-        method: "GET",
-        remoteURL: true,
-      });
-    })
-  );
+  return Promise.all(ids.map((id) => getMealById(id)));
 }
 
-function getMealById(mealId: string) {
-  // www.themealdb.com/api/json/v1/1/lookup.php?i=52772
+async function getMealById(mealId: string) {
+  return request({
+    url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`,
+    method: "GET",
+    remoteURL: true,
+  });
 }
 
-function getMealsBySearch(keywords: string) {
+function getMealsBySearch(keyword: string) {
   // www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
   // www.themealdb.com/api/json/v1/1/search.php?f=a
+  if (keyword.trim() === "") {
+    return null;
+  }
+
+  return Promise.all([
+    request({
+      url: `https://www.themealdb.com/api/json/v1/1/search.php?s=${keyword}`,
+      method: "GET",
+      remoteURL: true,
+    }),
+  ]);
 }
 
 async function getRandomMeals(num: number) {
@@ -81,7 +115,7 @@ async function getRandomMeals(num: number) {
   return Promise.all(mealRequests);
 }
 
-function renderMealList(meal: MenuType, isRandom: Boolean) {
+function renderMeal(meal: MenuType, isRandom: Boolean) {
   const menuDom = document.createElement("section");
   menuDom.classList.add("menu");
 
