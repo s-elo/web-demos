@@ -48,14 +48,25 @@
       display: flex;
       align-items: center;
       flex-wrap: nowrap;
-      overflow: hidden;
+      overflow: auto;
       justify-content: flex-start;
       list-style: none;
       text-align: center;
-      img {
-        width: 4rem;
-        height: 4rem;
-        border-radius: 50%;
+      li {
+        margin: 0 10px;
+        img {
+          width: 4rem;
+          height: 4rem;
+          border-radius: 50%;
+          border: 3px solid white;
+        }
+        .fav-menu-name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 4rem;
+          font-weight: bold;
+        }
       }
     }
   }
@@ -68,15 +79,17 @@
     background-color: #fff;
     .menu {
       width: 80%;
-      height: 18rem;
+      min-height: 18rem;
       margin: 20px auto;
       position: relative;
       display: flex;
       flex-direction: column;
+      border-radius: 15px;
       .shadow-box();
       img {
         width: 100%;
         height: 15rem;
+        border-radius: 15px 15px 0 0;
       }
       .tag {
         position: absolute;
@@ -88,13 +101,17 @@
       }
       .menu-info {
         width: 100%;
-        height: 3rem;
+        height: fit-content;
         border-top: 1px solid #7a7777;
         display: flex;
         justify-content: space-between;
         padding: 10px;
         align-items: center;
         font-weight: bold;
+        .menu-name {
+          max-width: 80%;
+          overflow-wrap: break-word;
+        }
         button {
           margin-left: 5px;
         }
