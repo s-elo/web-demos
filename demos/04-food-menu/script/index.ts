@@ -1,4 +1,4 @@
-import { request } from "../../utils.js";
+import { request, scrollDownListener } from "../../utils.js";
 
 const menuListDom = document.querySelector(".menu-list") as HTMLElement;
 const favListDom = document.querySelector(".fav-list ul") as HTMLUListElement;
@@ -25,6 +25,13 @@ type RespType = Array<{ meals: Array<MenuType> }>;
     renderFavMeal(meal.meals[0]);
   });
 })();
+
+// when scroll down, show more meals
+scrollDownListener(menuListDom, async () => {
+  const meals = (await getRandomMeals(2)) as RespType;
+  
+  meals.forEach((m) => renderMeal(m.meals[0], true));
+}, 1);
 
 searchBtn?.addEventListener("click", async () => {
   const keyword = searchInput.value;

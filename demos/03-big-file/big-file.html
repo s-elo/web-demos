@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Big File Upload</title>
     <link
+      rel="shortcut icon"
+      href="https://findicons.com/files/icons/2813/flat_jewels/512/file.png"
+      type="image/x-icon"
+    />
+    <link
       rel="stylesheet/less"
       type="text/css"
       href="demos/03-big-file/css/index.less"
@@ -20,9 +25,15 @@
         <span class="file-name-display">No File Yet</span>
         <br />
         <button id="upload-btn" class="btn-class">Upload</button>
-        <button id="pause-btn" class="btn-class btn-disable" disabled>Pause</button>
-        <button id="recover-btn" class="btn-class btn-disable" disabled>Recover</button>
-        <button id="cancel-btn" class="btn-class btn-disable" disabled>Cancel</button>
+        <button id="pause-btn" class="btn-class btn-disable" disabled>
+          Pause
+        </button>
+        <button id="recover-btn" class="btn-class btn-disable" disabled>
+          Recover
+        </button>
+        <button id="cancel-btn" class="btn-class btn-disable" disabled>
+          Cancel
+        </button>
         <div id="status"></div>
         <hr />
         <section id="progress-container">
@@ -31,7 +42,12 @@
             <span class="progress-bar-container">
               <div class="progress-bar" id="total-percent"></div>
             </span>
-            <span class="progress-number" id="total-percent-num" style=" color: #aaa3a3;">0%</span>
+            <span
+              class="progress-number"
+              id="total-percent-num"
+              style="color: #aaa3a3"
+              >0%</span
+            >
           </div>
           <div class="chunk-progress-container"></div>
         </section>

@@ -8,6 +8,19 @@
 .shadow-box {
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
 }
+.scroll-bar {
+  cursor: pointer;
+}
+.scroll-bar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-bar::-webkit-scrollbar-track {
+  background-color: darkgrey;
+}
+.scroll-bar::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
 * {
   padding: 0px;
   margin: 0px;
@@ -17,6 +30,7 @@
   user-select: none;
 }
 .container {
+  border-radius: 15px;
   margin: 100px auto;
   width: 400px;
   height: 650px;
@@ -32,10 +46,11 @@
   outline: none;
 }
 .container header {
+  border-radius: 15px 15px 0 0;
   width: 100%;
   height: 10%;
   display: flex;
-  padding-left: 10px;
+  padding: 10px;
   justify-content: flex-start;
   align-items: center;
   background-color: #fff;
@@ -85,6 +100,7 @@
   height: fit-content;
   overflow: auto;
   background-color: #fff;
+  border-radius: 0 0 15px 15px;
 }
 .container .menu-list .menu {
   width: 80%;

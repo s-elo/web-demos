@@ -1,7 +1,3 @@
-export function capFirstOne(str: string) {
-  return str.replace(/^\w/, (m) => m.toUpperCase());
-}
-
 interface RequestOpts {
   url: string;
   method: string;
@@ -11,6 +7,10 @@ interface RequestOpts {
   headers?: object;
   requestList?: Array<XMLHttpRequest>;
   onProgress?: (this: XMLHttpRequest, ev: ProgressEvent<EventTarget>) => any;
+}
+
+export function capFirstOne(str: string) {
+  return str.replace(/^\w/, (m) => m.toUpperCase());
 }
 
 const domain = `http://localhost:3500`;
@@ -106,4 +106,27 @@ export function BuildWorker(workerScript: () => void) {
       })
     )
   );
+}
+
+export function scrollDownListener(
+  container: HTMLElement,
+  callback: () => void,
+  bias: number
+) {
+  container.addEventListener("scroll", () => {
+    // the height of the container
+    const containerHeight = container.scrollHeight;
+    // the distance that the scroll bar has been scrolled
+    const scrolledTop = container.scrollTop;
+    // visible height of the container
+    const visibleHeight = container.clientHeight;
+
+    // visibleHeight + max(scrolledTop) = containerHeight
+
+    //  the bias is make sure that
+    //  the callback will be called when almost to the bottom
+    if (scrolledTop + visibleHeight + bias > containerHeight) {
+      callback();
+    }
+  });
 }
