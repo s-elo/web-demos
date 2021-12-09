@@ -13,7 +13,7 @@ interface MenuType {
   const meals = (await getRandomMeals(2)) as Array<{ meals: Array<MenuType> }>;
 
   meals.forEach((meal) => {
-    renderRandomMeal(meal.meals[0]);
+    renderMealList(meal.meals[0], true);
   });
 
   const favMeals = (await getFavList()) as Array<{ meals: Array<MenuType> }>;
@@ -81,14 +81,14 @@ async function getRandomMeals(num: number) {
   return Promise.all(mealRequests);
 }
 
-function renderRandomMeal(meal: MenuType) {
+function renderMealList(meal: MenuType, isRandom: Boolean) {
   const menuDom = document.createElement("section");
   menuDom.classList.add("menu");
 
   const isFavMeal = getFavIds().includes(meal.idMeal);
 
   menuDom.innerHTML = `
-  <h4 class="tag">Random Menu</h4>
+  <h4 class="tag">${isRandom ? `Random Meal` : `Search Meal`}</h4>
   <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
   <div class="menu-info">
     <div class="menu-name">${meal.strMeal}</div>
@@ -125,7 +125,7 @@ function renderRandomMeal(meal: MenuType) {
 function renderFavMeal(meal: MenuType) {
   const favMenuHTML = `
   <li id="fav-${meal.idMeal}">
-    <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+    <img src="${meal.strMealThumb}" alt="${meal.strMeal}" title="${meal.strMeal}">
     <div class="fav-menu-name" title="${meal.strMeal}">${meal.strMeal}</div>
   </li>
   `;
