@@ -8,24 +8,19 @@
 .shadow-box {
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
 }
-.scroll-bar {
-  cursor: pointer;
-}
 .scroll-bar::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 15px;
-  opacity: 0;
 }
 .scroll-bar::-webkit-scrollbar-track {
-  background-color: darkgrey;
   border-radius: 15px;
-  opacity: 0;
+  background-color: transparent;
 }
 .scroll-bar::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
-  opacity: 0;
+  background-color: transparent;
 }
 * {
   padding: 0px;
@@ -35,11 +30,15 @@
   font-size: 16px;
   user-select: none;
 }
+body {
+  background-color: #95afc0;
+  position: relative;
+}
 .container {
   border-radius: 15px;
   margin: 100px auto;
-  width: 400px;
-  height: 650px;
+  width: 25rem;
+  height: 41rem;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
   background-color: #e6e6e6;
   display: flex;
@@ -85,6 +84,8 @@
 }
 .container .fav-list ul li {
   margin: 0 10px;
+  position: relative;
+  cursor: pointer;
 }
 .container .fav-list ul li img {
   width: 4rem;
@@ -98,6 +99,19 @@
   white-space: nowrap;
   max-width: 4rem;
   font-weight: bold;
+}
+.container .fav-list ul li .remove-tag {
+  width: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  font-weight: bold;
+  position: absolute;
+  left: 3rem;
+  top: 0;
+  border-radius: 50%;
+  background-color: white;
+  transform: scale(0, 0);
+  transition: 0.5s;
 }
 .container .menu-list {
   flex: auto;
@@ -122,6 +136,7 @@
   width: 100%;
   height: 15rem;
   border-radius: 15px 15px 0 0;
+  cursor: pointer;
 }
 .container .menu-list .menu .tag {
   position: absolute;
@@ -147,4 +162,45 @@
 }
 .container .menu-list .menu .menu-info button {
   margin-left: 5px;
+}
+#info-container {
+  width: 28rem;
+  height: 43rem;
+  padding: 40px 20px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 0;
+  transform: scale(0, 0);
+  border-radius: 15px;
+  transition: 0.5s;
+}
+#info-container .close-tag {
+  font-weight: bold;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+#info-container .meal-info {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+#info-container .meal-info .meal-name {
+  font-weight: bold;
+}
+#info-container .meal-info img {
+  width: 80%;
+  margin: 10px auto;
+  display: block;
+}
+#info-container .meal-info .meal-intro {
+  text-indent: 1rem;
+}
+.info-active {
+  transform: scale(1, 1) translate(-50%, -50%) !important;
 }

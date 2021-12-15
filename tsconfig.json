@@ -63,6 +63,8 @@
         const box1 = document.querySelector('box1');
         // box1 might be null
         */
-    "strictNullChecks": true
+    "strictNullChecks": true,
+
+    "esModuleInterop": true
   }
 }
