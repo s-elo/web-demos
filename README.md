@@ -15,6 +15,31 @@ $npm start [project name]
 
 # Project details
 
+## 1. timer
+
+- time formatting
+
+## 2. quiz-app
+
+- nth sp
+
+## 3. big-file
+
+- break point continually transferring
+- file chunks
+- file storage
+- file merging
+- flash transferring
+
 ## 4. food-menu
 
-https://www.themealdb.com/api.php
+[Pubilc APIs](https://www.themealdb.com/api.php)
+
+- scroll to bottom listener
+- local storage
+- [Font style](https://pro.fontawesome.com) as icons
+
+## 5. notes-app
+
+- local storage
+- [marked](https://github.com/markedjs/marked) lib
