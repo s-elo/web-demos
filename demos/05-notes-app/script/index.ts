@@ -1,4 +1,19 @@
-import { generateId, deleteItem } from "../../utils.js";
+import { generateId, deleteItem, BuildWorker } from "../../utils.js";
+
+// const worker = BuildWorker(function () {
+//   const workerSelf = self as any;
+//   workerSelf.importScripts("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
+
+//   workerSelf.postMessage({
+//     lib: workerSelf.marked,
+//   });
+// }) as Worker;
+
+// worker.onmessage = (event) => {
+//   (window as any)["marked"] = event.data.lib;
+//   console.log((window as any).marked);
+// };
+const marked = (window as any).marked;
 
 const notesContainer = document.querySelector(
   ".notes-container"
@@ -43,10 +58,12 @@ function renderNote({ id, note }: Note = { id: "", note: "" }) {
         }"><i class="far fa-edit"></i></button>
         <button class="delete"><i class="far fa-trash-alt"></i></button>
     </header>
-    <textarea class="edit-area area ${
+    <textarea class="scroll-bar edit-area area ${
       hasNote ? "hidden" : ""
     }">${note}</textarea>
-    <section class="area ${!hasNote ? "hidden" : ""}">${note}</section>
+    <section class="scroll-bar area ${!hasNote ? "hidden" : ""}">${marked.parse(
+    note
+  )}</section>
     `;
 
   noteBox.innerHTML = noteHTML;
@@ -62,7 +79,7 @@ function renderNote({ id, note }: Note = { id: "", note: "" }) {
 
     if (newNote.trim() === "") return;
 
-    previewArea.innerText = newNote;
+    previewArea.innerHTML = marked.parse(newNote);
 
     editArea.classList.add("hidden");
     previewArea.classList.remove("hidden");

@@ -18,10 +18,14 @@
       href="demos/05-notes-app/css/index.less"
     />
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.11.1/less.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
     <button class="add-notes"><i class="fas fa-plus"></i>Add Notes</button>
     <div class="notes-container"></div>
+    <script>
+      window.marked = marked;
+    </script>
     <script type="module" src="dist/05-notes-app/script/index.js"></script>
   </body>
 </html>

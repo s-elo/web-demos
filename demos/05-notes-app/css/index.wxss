@@ -95,6 +95,9 @@ body .add-notes:hover {
   border-radius: 0 0 15px 15px;
   border: none;
   padding: 5px;
+  font-size: 1rem;
+  overflow-y: auto;
+  word-break: break-all;
 }
 .notes-container .note-box .hidden {
   display: none;
