@@ -1,0 +1,101 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v15/pxiEyp8kv8JHgFVrFJA.ttf) format('truetype');
+}
+.shadow-box {
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+}
+.scroll-bar::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 15px;
+}
+.scroll-bar::-webkit-scrollbar-track {
+  border-radius: 15px;
+  background-color: transparent;
+}
+.scroll-bar::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  background-color: transparent;
+}
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background-color: #3498db;
+  width: 100vw;
+  height: 100vh;
+}
+body .add-notes {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #40e986;
+  padding: 5px;
+  border-radius: 15px;
+  transition: .3s;
+  position: fixed;
+  left: 20px;
+  top: 20px;
+}
+body .add-notes:hover {
+  background-color: #2edb76;
+}
+.notes-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 100px 100px;
+  flex-wrap: wrap;
+}
+.notes-container .note-box {
+  width: 15rem;
+  height: 16.5rem;
+  margin: 20px 60px;
+  border-radius: 15px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.5);
+}
+.notes-container .note-box .tool-bar {
+  width: 100%;
+  height: 1.5rem;
+  padding: 0 10px;
+  border-radius: 15px 15px 0 0;
+  background-color: #40e986;
+  line-height: 1.5rem;
+  text-align: start;
+}
+.notes-container .note-box .tool-bar button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  margin-left: 10px;
+  transition: .5s;
+}
+.notes-container .note-box .tool-bar button:hover {
+  transform: scale(1.2, 1.2);
+}
+.notes-container .note-box .edit-area {
+  resize: none;
+  outline: none;
+}
+.notes-container .note-box .area {
+  width: 100%;
+  height: 15rem;
+  background-color: #ecf0f1;
+  border-radius: 0 0 15px 15px;
+  border: none;
+  padding: 5px;
+}
+.notes-container .note-box .hidden {
+  display: none;
+}

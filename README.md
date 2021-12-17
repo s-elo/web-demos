@@ -37,7 +37,7 @@ $npm start [project name]
 
 - scroll to bottom listener
 - local storage
-- [Font style](https://pro.fontawesome.com) as icons
+- [Icons](https://fontawesome.com/)
 
 ## 5. notes-app
 
