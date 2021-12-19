@@ -28,7 +28,7 @@ demo.all("*", (_, res, next) => {
   next();
 });
 
-const projects = ["timer", "quiz-app", "big-file", "food-menu", "notes-app"];
+const projects = ["timer", "quiz-app", "big-file", "food-menu", "notes-app", "todos"];
 const routerDir = path.resolve(__dirname, ".", "routers");
 
 projects.forEach((project, index) => {

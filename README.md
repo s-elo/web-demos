@@ -43,3 +43,8 @@ $npm start [project name]
 
 - local storage
 - [marked](https://github.com/markedjs/marked) lib
+
+## 6 todos
+
+- local storage
+- contextmenu event

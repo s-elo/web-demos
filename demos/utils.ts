@@ -77,7 +77,7 @@ export function deleteItem(
 ) {
   const index = arr.findIndex(howToDelete);
 
-  index !== -1 && arr.splice(index, index + 1);
+  index !== -1 && arr.splice(index, 1);
 }
 
 export function setStyle(dom: HTMLElement, styleObj: object) {
