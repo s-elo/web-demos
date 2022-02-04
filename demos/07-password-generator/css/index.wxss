@@ -1,0 +1,107 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v19/pxiEyp8kv8JHgFVrFJA.ttf) format('truetype');
+}
+.shadow-box {
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+.input {
+  outline: none;
+  border: none;
+}
+.scroll-bar::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 15px;
+}
+.scroll-bar::-webkit-scrollbar-track {
+  border-radius: 15px;
+  background-color: transparent;
+}
+.scroll-bar::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  background-color: transparent;
+}
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: #9b59b6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pw-container {
+  width: 25rem;
+  height: fit-content;
+  border-radius: 5px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  background-color: #772c97;
+  color: #eee;
+}
+.pw-container .pw-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.pw-container .pw-header .pw {
+  display: inline-block;
+  width: 80%;
+  height: 2.5rem;
+  padding: 8px;
+  background-color: #af6ec9;
+  border-radius: 5px;
+}
+.pw-container .pw-header button {
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  background-color: #b765d8;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  border: 0;
+  color: #e6e6e6;
+}
+.pw-container .pw-header button:hover {
+  background-color: #9b59b6;
+}
+.pw-container .pw-header button:focus {
+  outline: none;
+}
+.pw-container .form-control {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.pw-container .form-control #length {
+  width: 4rem;
+}
+.pw-container #btn-generate {
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  background-color: #f1c40f;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  border: 0;
+  color: black;
+  font-weight: bold;
+}
+.pw-container #btn-generate:hover {
+  background-color: #d6bc53;
+}
+.pw-container #btn-generate:focus {
+  outline: none;
+}
