@@ -28,19 +28,26 @@ demo.all("*", (_, res, next) => {
   next();
 });
 
-const projects = ["timer", "quiz-app", "big-file", "food-menu", "notes-app", "todos"];
+const isDir = (path) => {
+  const stat = fs.statSync(path);
+
+  return stat.isDirectory();
+};
+const demoPath = path.resolve(__dirname, ".", "demos");
+const projects = fs
+  .readdirSync(path.resolve(__dirname, ".", "demos"))
+  .filter((file) => isDir(`${demoPath}\\${file}`));
+
 const routerDir = path.resolve(__dirname, ".", "routers");
 
-projects.forEach((project, index) => {
+projects.forEach((ProjectDirName, _) => {
   // eg: 03-big-file
-  const ProjectDirName = `${
-    index < 9 ? `0${index + 1}` : index + 1
-  }-${project}`;
+  const projectName = ProjectDirName.slice(3);
 
   // get the html files
-  demo.get(`/${project}`, (_, res) => {
+  demo.get(`/${projectName}`, (_, res) => {
     const html = fs.readFileSync(
-      `./demos/${ProjectDirName}/${project}.html`,
+      `./demos/${ProjectDirName}/${projectName}.html`,
       "utf8"
     );
     return res.send(String(html));
@@ -52,7 +59,7 @@ projects.forEach((project, index) => {
   // if the project uses the server
   if (fs.existsSync(routerFileName)) {
     const router = require(routerFileName);
-    demo.use(`/${project}`, router);
+    demo.use(`/${projectName}`, router);
   }
 });
 
