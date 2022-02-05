@@ -4,6 +4,7 @@
 .input {
   outline: none;
   border: none;
+  padding: 5px;
 }
 .scroll-bar::-webkit-scrollbar {
   width: 0.5rem;
