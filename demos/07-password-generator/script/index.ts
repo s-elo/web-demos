@@ -1,9 +1,9 @@
 const form = document.querySelector("#pw-selection") as HTMLFormElement;
 const pwShow = document.querySelector(".pw") as HTMLSpanElement;
-
 const generateBtn = document.querySelector(
   "#btn-generate"
 ) as HTMLButtonElement;
+const copyBtn = document.querySelector("#copy-btn") as HTMLButtonElement;
 
 const selections = {
   uppers: `ABCDEFGHIJKLMNOPQRSTUVWXYZ`,
@@ -43,4 +43,19 @@ generateBtn.addEventListener("click", () => {
     Number(length),
     includes.map((x) => x[0]) as (keyof typeof selections)[]
   );
+});
+
+copyBtn.addEventListener("click", () => {
+  if (pwShow.innerHTML.trim() === "") return;
+
+  const textareaDom = document.createElement("textarea");
+
+  textareaDom.value = pwShow.innerHTML;
+
+  document.body.appendChild(textareaDom);
+
+  textareaDom.select();
+  document.execCommand("copy");
+
+  textareaDom.parentNode!.removeChild(textareaDom);
 });
