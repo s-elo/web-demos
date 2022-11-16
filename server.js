@@ -2,13 +2,16 @@ const express = require("express");
 const fs = require("fs-extra");
 const path = require("path");
 const { exec } = require("child_process");
-const open = require("open");
+const yargs = require("yargs/yargs");
+const { hideBin } = require("yargs/helpers");
+
+const { projectName } = yargs(hideBin(process.argv)).argv;
+
 // handle formdata
 const formidableMiddleware = require("express-formidable");
 
 const demo = express();
 const port = 3500;
-const [projectName] = process.argv.slice(2);
 
 const domain = `http://localhost:${port}/${
   projectName ? projectName : "timer"
@@ -36,7 +39,7 @@ const isDir = (path) => {
 const demoPath = path.resolve(__dirname, ".", "demos");
 const projects = fs
   .readdirSync(path.resolve(__dirname, ".", "demos"))
-  .filter((file) => isDir(`${demoPath}\\${file}`));
+  .filter((file) => isDir(path.resolve(`${demoPath}/${file}`)));
 
 const routerDir = path.resolve(__dirname, ".", "routers");
 
@@ -67,9 +70,7 @@ demo.get("/data", (_, res) => {
   return res.send({ data: "get it" });
 });
 
-demo.listen(port, () => console.log(`Listening on port ${port}`));
+demo.listen(port, () => console.log(`Listening on ${domain}`));
 
 // ts compile watcher
 exec("tsc -w");
-
-open(domain, "chrome");
