@@ -6,7 +6,7 @@ export default function () {
   // thus the workerSelf scope also has
   // now we can use SparkMD5 to generate the hash in this worker
   workerSelf.importScripts(
-    "https://cdn.bootcdn.net/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"
+    "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js"
   );
 
   workerSelf.onmessage = (event: MessageEvent<any>) => {
